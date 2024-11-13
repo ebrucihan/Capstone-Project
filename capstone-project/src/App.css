@@ -1,0 +1,48 @@
+/* Genel Sayfa Stili */
+body {
+  font-family: "Sour Gummy", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-image: url("/library.jpg");
+  background-size: cover; /* Ensures the image covers the entire viewport */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-attachment: fixed; /* Keeps the image fixed while scrolling */
+  color: #9e9e9e;
+}
+
+/* Navbar Stili */
+.navbar {
+  background-color: transparent;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: flex-start; /* Navbar öğelerini sola hizala */
+  gap: 20px;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item link {
+  font-weight: bold;
+  color: #9e9e9e;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #ff9800;
+}

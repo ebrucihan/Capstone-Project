@@ -12,26 +12,38 @@ import "./App.css";
 function App() {
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Ana Sayfa</Link>
+      <div className="container">
+        <nav className="navbar">
+          <ul className="nav-links">
+            <li className="nav-item">
+              <Link to="/" className="nav-link">
+                Home
+              </Link>
             </li>
-            <li>
-              <Link to="/publishers">Yayıncılar</Link>
+            <li className="nav-item">
+              <Link to="/publishers" className="nav-link">
+                Publishers
+              </Link>
             </li>
-            <li>
-              <Link to="/categories">Kategoriler</Link>
+            <li className="nav-item">
+              <Link to="/categories" className="nav-link">
+                Categories
+              </Link>
             </li>
-            <li>
-              <Link to="/books">Kitaplar</Link>
+            <li className="nav-item">
+              <Link to="/books" className="nav-link">
+                Books
+              </Link>
             </li>
-            <li>
-              <Link to="/authors">Yazarlar</Link>
+            <li className="nav-item">
+              <Link to="/authors" className="nav-link">
+                Authors
+              </Link>
             </li>
-            <li>
-              <Link to="/borrows">Kitap Alma</Link>
+            <li className="nav-item">
+              <Link to="/borrows" className="nav-link">
+                Borrowing Books
+              </Link>
             </li>
           </ul>
         </nav>

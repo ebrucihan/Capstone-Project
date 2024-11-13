@@ -1,0 +1,13 @@
+.publisher-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px;
+  max-width: 1100px;
+  margin: 100px auto;
+  background-color: rgba(24, 23, 23, 0.7);
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}

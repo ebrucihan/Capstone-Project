@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PublisherService from "../services/PublisherService";
+import "../css/Publisher.css";
 
 function Publishers() {
   const [publishers, setPublishers] = useState([]);
@@ -98,8 +99,8 @@ function Publishers() {
   };
 
   return (
-    <div>
-      <h1>Yayıncılar Sayfası</h1>
+    <div className="publisher-content">
+      <h1>Publishers</h1>
       {message && (
         <p style={{ color: message.includes("hata") ? "red" : "green" }}>
           {message}
