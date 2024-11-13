@@ -1,7 +1,7 @@
 import React from "react";
 
 function Borrows() {
-  return <h1>Kitap Alma Sayfası</h1>;
+  return <h1>Borrowing Book</h1>;
 }
 
 export default Borrows;
