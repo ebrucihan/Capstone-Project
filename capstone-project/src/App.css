@@ -4,25 +4,32 @@ body {
   margin: 0;
   padding: 0;
   background-image: url("/library.jpg");
-  background-size: cover; /* Ensures the image covers the entire viewport */
-  background-position: center; /* Centers the image */
-  background-repeat: no-repeat; /* Prevents the image from repeating */
-  background-attachment: fixed; /* Keeps the image fixed while scrolling */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: #9e9e9e;
+  cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="24">📙</text></svg>'),
+    auto;
 }
 
 /* Navbar Stili */
 .navbar {
-  background-color: transparent;
+  background-color: transparent; /* Başlangıçta şeffaf */
   padding: 15px 30px;
   display: flex;
-  justify-content: flex-start; /* Navbar öğelerini sola hizala */
+  justify-content: flex-start;
   gap: 20px;
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10; /* Navbarın üstte kalması için */
+  transition: background-color 0.3s ease, opacity 0.5s ease; /* Renk ve opaklık geçişleri */
+  opacity: 1; /* Başlangıçta görünür */
 }
 
+/* Navbar linkleri */
 .nav-links {
   list-style: none;
   display: flex;
@@ -31,18 +38,14 @@ body {
   padding: 0;
 }
 
-.nav-item link {
-  font-weight: bold;
-  color: #9e9e9e;
-}
-
-.nav-link {
+.nav-item .nav-link {
   text-decoration: none;
   color: #fff;
   font-size: 16px;
+  font-weight: bold;
   transition: color 0.3s ease;
 }
 
 .nav-link:hover {
-  color: #ff9800;
+  color: #ff9800; /* Link üzerine gelindiğinde renk değişimi */
 }

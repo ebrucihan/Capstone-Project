@@ -1,5 +1,5 @@
-/* Publisher Ana İçerik Konteyneri */
-.publisher-content {
+/* Category Ana İçerik Konteyneri */
+.category-content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,22 +15,34 @@
 }
 
 /* Başlık */
-.publisher-content h1 {
+.category-content h1 {
   font-size: 50px;
   color: #fff;
   margin-bottom: 20px;
 }
 
 /* Mesajlar */
-.publisher-content p {
+.category-content p {
   font-size: 20px;
   color: #fff;
   margin-bottom: 20px;
 }
 
 /* Butonlar ve Arama Kutusu */
-.publisher-content button,
-.publisher-content input[type="text"] {
+
+.category-content input[type="text"] {
+  background-color: #d84315;
+  color: #333232;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin: 5px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+.category-content button {
   background-color: #d84315;
   color: #fff;
   padding: 10px 20px;
@@ -42,13 +54,15 @@
   font-weight: bold;
 }
 
-.publisher-content button:hover,
-.publisher-content input[type="text"]:hover {
+.category-content button:hover {
   background-color: #bf360c;
+}
+.category-content input[type="text"]:hover {
+  background-color: #ffffff;
 }
 
 /* Form Elemanları */
-.publisher-content form {
+.category-content form {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -57,8 +71,8 @@
   margin-bottom: 20px;
 }
 
-.publisher-content form input[type="text"],
-.publisher-content form input[type="number"] {
+.category-content form input[type="text"],
+.category-content form input[type="number"] {
   width: 100%;
   padding: 12px;
   margin-bottom: 10px;
@@ -68,26 +82,26 @@
 }
 
 /* Tablo */
-.publisher-content table {
+.category-content table {
   width: 100%;
   max-width: 1000px;
   margin-top: 20px;
   border-collapse: collapse;
 }
 
-.publisher-content table th,
-.publisher-content table td {
+.category-content table th,
+.category-content table td {
   padding: 12px;
   border: 1px solid #ddd;
   color: #fff;
   text-align: center;
 }
 
-.publisher-content table th {
+.category-content table th {
   background-color: rgba(24, 23, 23, 0.8);
 }
 
-.publisher-content table tr:nth-child(even) {
+.category-content table tr:nth-child(even) {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
@@ -95,22 +109,22 @@
 
 /* For Tablets and Smaller Desktops */
 @media (max-width: 768px) {
-  .publisher-content {
+  .category-content {
     padding: 20px;
     margin: 80px auto;
   }
 
-  .publisher-content h1 {
+  .category-content h1 {
     font-size: 36px;
   }
 
-  .publisher-content p {
+  .category-content p {
     font-size: 16px;
   }
 
-  .publisher-content button,
-  .publisher-content input[type="text"],
-  .publisher-content input[type="number"] {
+  .category-content button,
+  .category-content input[type="text"],
+  .category-content input[type="number"] {
     font-size: 14px;
     padding: 8px 16px;
   }
@@ -118,28 +132,28 @@
 
 /* For Mobile Devices */
 @media (max-width: 480px) {
-  .publisher-content {
+  .category-content {
     padding: 15px;
     margin: 60px auto;
   }
 
-  .publisher-content h1 {
+  .category-content h1 {
     font-size: 28px;
   }
 
-  .publisher-content p {
+  .category-content p {
     font-size: 14px;
   }
 
-  .publisher-content button,
-  .publisher-content input[type="text"],
-  .publisher-content input[type="number"] {
+  .category-content button,
+  .category-content input[type="text"],
+  .category-content input[type="number"] {
     padding: 6px 12px;
     font-size: 12px;
   }
 
-  .publisher-content table th,
-  .publisher-content table td {
+  .category-content table th,
+  .category-content table td {
     padding: 8px;
   }
 }

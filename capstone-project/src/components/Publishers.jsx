@@ -17,10 +17,13 @@ function Publishers() {
     try {
       const data = await PublisherService.getPublishers(); // getAllPublishers yerine getPublishers kullanıldı
       setPublishers(data);
-      setMessage("Tüm yayınevleri başarıyla yüklendi!");
+      setMessage("All publishers have been successfully uploaded!");
     } catch (error) {
-      console.error("Tüm yayınevlerini çekerken bir hata oluştu:", error);
-      setMessage("Tüm yayınevlerini çekerken bir hata oluştu.");
+      console.error(
+        "An error occurred while pulling all the broadcasters:",
+        error
+      );
+      setMessage("An error occurred while pulling all broadcasters.");
     }
   };
 
@@ -29,13 +32,18 @@ function Publishers() {
       const data = await PublisherService.getPublisherById(searchId);
       if (data) {
         setPublishers([data]); // Sadece aranan ID'ye sahip yayınevini göster
-        setMessage(`ID ${searchId} olan yayınevi başarıyla bulundu!`);
+        setMessage(
+          `The publishing house with ID ${searchId} was found successfully!`
+        );
       } else {
-        setMessage(`ID ${searchId} olan bir yayınevi bulunamadı.`);
+        setMessage(`No publisher found with ID ${searchId} `);
       }
     } catch (error) {
-      console.error("Yayınevi ararken bir hata oluştu:", error);
-      setMessage("Yayınevi ararken bir hata oluştu.");
+      console.error(
+        "An error occurred while searching for a publisher:",
+        error
+      );
+      setMessage("An error occurred while searching for a publisher.");
     }
   };
 
@@ -54,10 +62,10 @@ function Publishers() {
       const addedPublisher = await PublisherService.addPublisher(newPublisher);
       setPublishers([...publishers, addedPublisher]);
       setNewPublisher({ name: "", establishmentYear: 0, address: "" });
-      setMessage("Yayıncı başarıyla eklendi!");
+      setMessage("Publisher added successfully!");
     } catch (error) {
-      console.error("Yayıncı eklerken bir hata oluştu:", error);
-      setMessage("Yayıncı eklenirken bir hata oluştu.");
+      console.error("An error occurred while adding a publisher:", error);
+      setMessage("An error occurred while adding the publisher.");
     }
   };
 
@@ -80,10 +88,10 @@ function Publishers() {
         )
       );
       setEditingPublisher(null);
-      setMessage("Yayıncı başarıyla güncellendi!");
+      setMessage("Publisher updated successfully!");
     } catch (error) {
-      console.error("Yayıncı güncellerken bir hata oluştu:", error);
-      setMessage("Yayıncı güncellenirken bir hata oluştu.");
+      console.error("An error occurred while updating the publisher:", error);
+      setMessage("An error occurred while updating the publisher.");
     }
   };
 
@@ -91,10 +99,10 @@ function Publishers() {
     try {
       await PublisherService.deletePublisher(id);
       setPublishers(publishers.filter((publisher) => publisher.id !== id));
-      setMessage("Yayıncı başarıyla silindi!");
+      setMessage("Publisher successfully deleted!");
     } catch (error) {
-      console.error("Yayıncı silinirken bir hata oluştu:", error);
-      setMessage("Yayıncı silinirken bir hata oluştu.");
+      console.error("An error occurred while deleting the publisher:", error);
+      setMessage("An error occurred while deleting the publisher.");
     }
   };
 
@@ -102,21 +110,21 @@ function Publishers() {
     <div className="publisher-content">
       <h1>Publishers</h1>
       {message && (
-        <p style={{ color: message.includes("hata") ? "red" : "green" }}>
+        <p style={{ color: message.includes("error") ? "red" : "green" }}>
           {message}
         </p>
       )}
 
-      <button onClick={fetchAllPublishers}>Tüm Yayınevlerini Getir</button>
+      <button onClick={fetchAllPublishers}>Get All Publishers</button>
 
       <div>
         <input
           type="text"
-          placeholder="ID ile yayınevi ara"
+          placeholder="Search publisher by ID"
           value={searchId}
           onChange={(e) => setSearchId(e.target.value)}
         />
-        <button onClick={fetchPublisherById}>ID ile Ara</button>
+        <button onClick={fetchPublisherById}>Search by ID</button>
       </div>
 
       <form
@@ -127,7 +135,7 @@ function Publishers() {
           name="name"
           value={editingPublisher ? editingPublisher.name : newPublisher.name}
           onChange={handleInputChange}
-          placeholder="Yayıncı adı"
+          placeholder="Publisher name"
           required
         />
         <input
@@ -139,7 +147,7 @@ function Publishers() {
               : newPublisher.establishmentYear
           }
           onChange={handleInputChange}
-          placeholder="Kuruluş Yılı"
+          placeholder="Year of Foundation"
           required
         />
         <input
@@ -149,10 +157,10 @@ function Publishers() {
             editingPublisher ? editingPublisher.address : newPublisher.address
           }
           onChange={handleInputChange}
-          placeholder="Adres"
+          placeholder="Address"
           required
         />
-        <button type="submit">{editingPublisher ? "Güncelle" : "Ekle"}</button>
+        <button type="submit">{editingPublisher ? "Update" : "Add"}</button>
       </form>
 
       {publishers.length > 0 && (
@@ -160,10 +168,10 @@ function Publishers() {
           <thead>
             <tr>
               <th>ID</th> {/* Added ID header */}
-              <th>Yayıncı Adı</th>
-              <th>Kuruluş Yılı</th>
-              <th>Adres</th>
-              <th>İşlemler</th>
+              <th>Publisher Name</th>
+              <th>Year of Foundation</th>
+              <th>Address</th>
+              <th>Operations</th>
             </tr>
           </thead>
           <tbody>
@@ -175,10 +183,10 @@ function Publishers() {
                 <td>{publisher.address}</td>
                 <td>
                   <button onClick={() => handleEditClick(publisher)}>
-                    Düzenle
+                    Edit
                   </button>
                   <button onClick={() => handleDeletePublisher(publisher.id)}>
-                    Sil
+                    Delete
                   </button>
                 </td>
               </tr>

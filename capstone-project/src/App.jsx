@@ -1,5 +1,5 @@
 // App.jsx
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./components/Home";
 import Publishers from "./components/Publishers";
@@ -10,6 +10,26 @@ import Borrows from "./components/Borrows";
 import "./App.css";
 
 function App() {
+  useEffect(() => {
+    const handleScroll = () => {
+      const navbar = document.querySelector(".navbar");
+
+      if (window.scrollY > 50) {
+        navbar.style.backgroundColor = "#d84315"; // Kaydırıldığında arka plan rengini değiştir
+        navbar.style.opacity = "1"; // Hep görünür yap
+      } else {
+        navbar.style.backgroundColor = "transparent"; // En yukarıdayken şeffaf yap
+        navbar.style.opacity = "1"; // Görünürlüğü geri getir
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <Router>
       <div className="container">
