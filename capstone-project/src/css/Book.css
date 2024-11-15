@@ -1,0 +1,189 @@
+/* Book Ana İçerik Konteyneri */
+.book-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 52px;
+  max-width: 1100px;
+  margin: 100px auto;
+  background-color: rgba(24, 23, 23, 0.7);
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Başlık */
+.book-content h1 {
+  font-size: 50px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+/* Mesajlar */
+.book-content p {
+  font-size: 20px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+/* Form Alanları İçin Genel Stil */
+
+/* Search Section Styling */
+.search-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.search-section input[type="number"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  width: 150px;
+  background-color: #fff;
+  color: #333232;
+  font-family: "Sour Gummy", sans-serif;
+}
+
+.book-content form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: 20px;
+}
+
+.book-content form .form-group {
+  display: flex;
+  flex-direction: column;
+  width: calc(33.33% - 20px); /* Üçlü yan yana */
+}
+
+.book-content form .form-group select {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  background-color: #d84315;
+  color: #333232;
+  font-family: "Sour Gummy", sans-serif;
+}
+
+.book-content form .form-group input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  background-color: #fff;
+  color: #333232;
+  font-family: "Sour Gummy", sans-serif;
+}
+
+.book-content form .form-group label {
+  color: #fff;
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.book-content button {
+  font-family: "Sour Gummy", sans-serif;
+  background-color: #d84315;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100px;
+  margin: 5px; /* Butonlar arasına boşluk ekler */
+}
+
+.book-content button:hover {
+  background-color: #bf360c;
+}
+
+/* Tablo */
+.book-content table {
+  width: 100%;
+  max-width: 1000px;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.book-content table th,
+.book-content table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  color: #fff;
+  text-align: center;
+}
+
+.book-content table th {
+  background-color: rgba(24, 23, 23, 0.8);
+}
+
+.book-content table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Responsive Tasarım */
+
+/* Tabletler ve Küçük Masaüstü Ekranlar için */
+@media (max-width: 768px) {
+  .book-content {
+    padding: 20px;
+    margin: 80px auto;
+  }
+
+  .book-content h1 {
+    font-size: 36px;
+  }
+
+  .book-content p {
+    font-size: 16px;
+  }
+
+  .book-content form .form-group {
+    width: 100%; /* Küçük ekranlarda tam genişlik */
+  }
+
+  .book-content button {
+    width: auto;
+  }
+}
+
+/* Mobil Cihazlar için */
+@media (max-width: 480px) {
+  .book-content {
+    padding: 15px;
+    margin: 60px auto;
+  }
+
+  .book-content h1 {
+    font-size: 28px;
+  }
+
+  .book-content p {
+    font-size: 14px;
+  }
+
+  .book-content button,
+  .book-content form .form-group input,
+  .book-content form .form-group select {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .book-content table th,
+  .book-content table td {
+    padding: 8px;
+  }
+}

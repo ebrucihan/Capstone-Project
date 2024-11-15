@@ -165,7 +165,7 @@ function Authors() {
                 <th>Author Name</th>
                 <th>Birth Date</th>
                 <th>Country</th>
-                <th>Actions</th>
+                <th>Operations</th>
               </tr>
             </thead>
             <tbody>

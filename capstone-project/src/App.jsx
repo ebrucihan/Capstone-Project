@@ -51,13 +51,13 @@ function App() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/books" className="nav-link">
-                Books
+              <Link to="/authors" className="nav-link">
+                Authors
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/authors" className="nav-link">
-                Authors
+              <Link to="/books" className="nav-link">
+                Books
               </Link>
             </li>
             <li className="nav-item">

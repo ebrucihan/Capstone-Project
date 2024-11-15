@@ -31,7 +31,7 @@
 /* Butonlar ve Arama Kutusu */
 
 .category-content input[type="text"] {
-  background-color: #d84315;
+  background-color: #ffffff;
   color: #333232;
   padding: 10px 20px;
   border: none;
@@ -52,13 +52,17 @@
   font-size: 16px;
   transition: background-color 0.3s ease;
   font-weight: bold;
+  font-family: "Sour Gummy", sans-serif;
+}
+input::placeholder {
+  font-family: "Sour Gummy", sans-serif;
 }
 
 .category-content button:hover {
   background-color: #bf360c;
 }
 .category-content input[type="text"]:hover {
-  background-color: #ffffff;
+  background-color: #bf360c;
 }
 
 /* Form Elemanları */
@@ -79,6 +83,7 @@
   border-radius: 5px;
   border: 1px solid #ddd;
   font-size: 16px;
+  font-family: "Sour Gummy", sans-serif;
 }
 
 /* Tablo */

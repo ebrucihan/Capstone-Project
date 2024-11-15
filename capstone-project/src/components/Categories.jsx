@@ -161,7 +161,7 @@ function Categories() {
                 <th>ID</th>
                 <th>Category Name</th>
                 <th>Description</th>
-                <th>Actions</th>
+                <th>Operations</th>
               </tr>
             </thead>
             <tbody>
