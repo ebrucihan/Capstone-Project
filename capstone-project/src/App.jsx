@@ -6,7 +6,7 @@ import Publishers from "./components/Publishers";
 import Categories from "./components/Categories";
 import Books from "./components/Books";
 import Authors from "./components/Authors";
-import Borrows from "./components/Borrows";
+import Borrows from "./components/BookBorrow";
 import "./App.css";
 
 function App() {

@@ -6,7 +6,7 @@ import CategoriesService from "../services/CategoriesService";
 import "../css/Book.css";
 
 function Books() {
-  const [books, setBooks] = useState([]); // Books list initially empty
+  const [books, setBooks] = useState([]);
   const [newBook, setNewBook] = useState({
     name: "",
     publicationYear: 0,
@@ -20,8 +20,8 @@ function Books() {
   const [categories, setCategories] = useState([]);
   const [editingBook, setEditingBook] = useState(null);
   const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState(""); // "success" or "error"
-  const [searchId, setSearchId] = useState(""); // State for the ID input field
+  const [messageType, setMessageType] = useState("");
+  const [searchId, setSearchId] = useState("");
 
   useEffect(() => {
     fetchAllAuthors();
@@ -87,6 +87,20 @@ function Books() {
 
   const handleAddBook = async (e) => {
     e.preventDefault();
+    if (!newBook.name || !newBook.publicationYear || !newBook.stock) {
+      setMessage("All fields must be filled!");
+      setMessageType("error");
+      return;
+    }
+    if (
+      !newBook.author.id ||
+      !newBook.publisher.id ||
+      newBook.categories.length === 0
+    ) {
+      setMessage("Author, Publisher, and Categories are required!");
+      setMessageType("error");
+      return;
+    }
     try {
       const addedBook = await BooksService.addBook(newBook);
       setBooks([...books, addedBook]);
@@ -120,6 +134,20 @@ function Books() {
 
   const handleUpdateBook = async (e) => {
     e.preventDefault();
+    if (!newBook.name || !newBook.publicationYear || !newBook.stock) {
+      setMessage("All fields must be filled!");
+      setMessageType("error");
+      return;
+    }
+    if (
+      !newBook.author.id ||
+      !newBook.publisher.id ||
+      newBook.categories.length === 0
+    ) {
+      setMessage("Author, Publisher, and Categories are required!");
+      setMessageType("error");
+      return;
+    }
     try {
       const updatedBook = await BooksService.updateBook(
         editingBook.id,
@@ -157,12 +185,11 @@ function Books() {
     }
   };
 
-  // New function to handle search by ID
   const handleSearchById = async (e) => {
     e.preventDefault();
     try {
       const book = await BooksService.getBookById(searchId);
-      setBooks([book]); // Display only the searched book
+      setBooks([book]);
       setMessage("Book found!");
       setMessageType("success");
     } catch (error) {
@@ -186,8 +213,7 @@ function Books() {
           {message}
         </p>
       )}
-      {/* Search by ID and Get All Books Section */}
-      <form onSubmit={handleSearchById} className="search-section">
+      <form onSubmit={handleSearchById}>
         <input
           type="number"
           placeholder="Enter Book ID"
@@ -200,100 +226,72 @@ function Books() {
           Get All Books
         </button>
       </form>
-
-      {/* Add/Edit Book Form */}
       <form onSubmit={editingBook ? handleUpdateBook : handleAddBook}>
-        <div className="form-group">
-          <label>Book Name</label>
-          <input
-            type="text"
-            name="name"
-            value={newBook.name}
-            onChange={handleInputChange}
-            placeholder="Book Name"
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Publication Year</label>
-          <input
-            type="number"
-            name="publicationYear"
-            value={newBook.publicationYear}
-            onChange={handleInputChange}
-            placeholder="Publication Year"
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Stock</label>
-          <input
-            type="number"
-            name="stock"
-            value={newBook.stock}
-            onChange={handleInputChange}
-            placeholder="Stock"
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Author</label>
-          <select
-            name="authorId"
-            value={newBook.author.id}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="">Select Author</option>
-            {authors.map((author) => (
-              <option key={author.id} value={author.id}>
-                {author.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label>Publisher</label>
-          <select
-            name="publisherId"
-            value={newBook.publisher.id}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="">Select Publisher</option>
-            {publishers.map((publisher) => (
-              <option key={publisher.id} value={publisher.id}>
-                {publisher.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label>Categories</label>
-          <select
-            name="categoryIds"
-            value={newBook.categories.map((cat) => cat.id)}
-            onChange={handleInputChange}
-            multiple
-            required
-          >
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
+        <input
+          type="text"
+          name="name"
+          value={newBook.name}
+          onChange={handleInputChange}
+          placeholder="Book Name"
+          required
+        />
+        <input
+          type="number"
+          name="publicationYear"
+          value={newBook.publicationYear}
+          onChange={handleInputChange}
+          placeholder="Publication Year"
+          required
+        />
+        <input
+          type="number"
+          name="stock"
+          value={newBook.stock}
+          onChange={handleInputChange}
+          placeholder="Stock"
+          required
+        />
+        <select
+          name="authorId"
+          value={newBook.author.id}
+          onChange={handleInputChange}
+          required
+        >
+          <option value="">Select Author</option>
+          {authors.map((author) => (
+            <option key={author.id} value={author.id}>
+              {author.name}
+            </option>
+          ))}
+        </select>
+        <select
+          name="publisherId"
+          value={newBook.publisher.id}
+          onChange={handleInputChange}
+          required
+        >
+          <option value="">Select Publisher</option>
+          {publishers.map((publisher) => (
+            <option key={publisher.id} value={publisher.id}>
+              {publisher.name}
+            </option>
+          ))}
+        </select>
+        <select
+          name="categoryIds"
+          value={newBook.categories.map((cat) => cat.id)}
+          onChange={handleInputChange}
+          multiple
+          required
+        >
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
         <button type="submit">{editingBook ? "Update" : "Add"}</button>
       </form>
-
-      {/* Conditional rendering for the table */}
       {books.length > 0 && (
         <table>
           <thead>
