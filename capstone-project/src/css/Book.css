@@ -65,16 +65,7 @@
   width: calc(33.33% - 20px); /* Üçlü yan yana */
 }
 
-.book-content form .form-group select {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  font-size: 16px;
-  background-color: #d84315;
-  color: #333232;
-  font-family: "Sour Gummy", sans-serif;
-}
-
+.book-content form .form-group select,
 .book-content form .form-group input {
   padding: 10px;
   border-radius: 5px;
@@ -83,6 +74,10 @@
   background-color: #fff;
   color: #333232;
   font-family: "Sour Gummy", sans-serif;
+}
+
+.book-content form .form-group select {
+  background-color: #d84315;
 }
 
 .book-content form .form-group label {

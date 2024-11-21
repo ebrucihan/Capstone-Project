@@ -15,6 +15,7 @@ function BookBorrow() {
   const [searchId, setSearchId] = useState("");
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
+  const [showTable, setShowTable] = useState(false); // Tabloyu kontrol etmek için state, başlangıçta false
 
   useEffect(() => {
     fetchAllBorrows();
@@ -24,11 +25,10 @@ function BookBorrow() {
     try {
       const data = await BorrowService.getAllBorrows();
       setBorrows(data);
-      setMessage("All borrow records successfully loaded!");
-      setMessageType("success");
+      showMessage("All borrow records successfully loaded!", "success");
+      setShowTable(true); // Veriler başarıyla yüklendiğinde tabloyu göster
     } catch (error) {
-      setMessage("Error loading borrow records.");
-      setMessageType("error");
+      showMessage("Error loading borrow records.", "error");
     }
   };
 
@@ -37,16 +37,24 @@ function BookBorrow() {
       const data = await BorrowService.getBorrowById(searchId);
       if (data) {
         setBorrows([data]);
-        setMessage("Borrow record found!");
-        setMessageType("success");
+        showMessage("Borrow record found!", "success");
+        setShowTable(true); // ID ile arama yapıldığında tabloyu göster
       } else {
-        setMessage("No borrow record found with this ID.");
-        setMessageType("error");
+        showMessage("No borrow record found with this ID.", "error");
+        setShowTable(false); // Kayıt bulunmazsa tabloyu gizle
       }
     } catch (error) {
-      setMessage("Error searching for borrow record.");
-      setMessageType("error");
+      showMessage("Error searching for borrow record.", "error");
+      setShowTable(false); // Hata olursa tabloyu gizle
     }
+  };
+
+  const showMessage = (msg, type) => {
+    setMessage(msg);
+    setMessageType(type);
+    setTimeout(() => {
+      setMessage("");
+    }, 3000);
   };
 
   const handleInputChange = (e) => {
@@ -66,31 +74,36 @@ function BookBorrow() {
     }
   };
 
-  const validateForm = (borrow) => {
+  const validateForm = (borrow, isUpdate) => {
     const {
       borrowerName,
       borrowerMail,
       borrowingDate,
-      returnDate,
       bookForBorrowingRequest,
+      returnDate,
     } = borrow;
+
     if (
-      !borrowerName ||
-      !borrowerMail ||
-      !borrowingDate ||
-      !returnDate ||
+      !borrowerName.trim() ||
+      !borrowerMail.trim() ||
+      !borrowingDate.trim() ||
       !bookForBorrowingRequest.id
     ) {
-      setMessage("All fields must be filled!");
-      setMessageType("error");
+      showMessage("All fields must be filled!", "error");
       return false;
     }
+
+    if (isUpdate && !returnDate.trim()) {
+      showMessage("Return Date is required for update!", "error");
+      return false;
+    }
+
     return true;
   };
 
   const handleAddBorrow = async (e) => {
     e.preventDefault();
-    if (!validateForm(newBorrow)) return;
+    if (!validateForm(newBorrow, false)) return;
 
     try {
       const addedBorrow = await BorrowService.addBorrow(newBorrow);
@@ -102,11 +115,10 @@ function BookBorrow() {
         returnDate: "",
         bookForBorrowingRequest: { id: "" },
       });
-      setMessage("Borrow record added successfully!");
-      setMessageType("success");
+      showMessage("Borrow record added successfully!", "success");
+      setShowTable(true); // Yeni ekleme ile tabloyu göster
     } catch (error) {
-      setMessage("Error adding borrow record.");
-      setMessageType("error");
+      showMessage("Error adding borrow record.", "error");
     }
   };
 
@@ -116,31 +128,30 @@ function BookBorrow() {
       borrowerName: borrow.borrowerName,
       borrowerMail: borrow.borrowerMail,
       borrowingDate: borrow.borrowingDate,
-      returnDate: borrow.returnDate,
-      bookForBorrow,
+      returnDate: borrow.returnDate || "",
+      bookForBorrowingRequest: { id: borrow.book?.id || "" },
     });
   };
 
   const handleUpdateBorrow = async (e) => {
     e.preventDefault();
-    if (!validateForm(editingBorrow)) return;
+    if (!validateForm(editingBorrow, true)) return;
 
     try {
-      const updatedBorrow = await BorrowService.updateBorrow(
-        editingBorrow.id,
-        editingBorrow
-      );
+      const updatedBorrow = await BorrowService.updateBorrow(editingBorrow.id, {
+        borrowerName: editingBorrow.borrowerName,
+        borrowingDate: editingBorrow.borrowingDate,
+        returnDate: editingBorrow.returnDate,
+      });
       setBorrows(
         borrows.map((borrow) =>
           borrow.id === updatedBorrow.id ? updatedBorrow : borrow
         )
       );
       setEditingBorrow(null);
-      setMessage("Borrow record updated successfully!");
-      setMessageType("success");
+      showMessage("Borrow record updated successfully!", "success");
     } catch (error) {
-      setMessage("Error updating borrow record.");
-      setMessageType("error");
+      showMessage("Error updating borrow record.", "error");
     }
   };
 
@@ -148,11 +159,9 @@ function BookBorrow() {
     try {
       await BorrowService.deleteBorrow(id);
       setBorrows(borrows.filter((borrow) => borrow.id !== id));
-      setMessage("Borrow record deleted successfully!");
-      setMessageType("success");
+      showMessage("Borrow record deleted successfully!", "success");
     } catch (error) {
-      setMessage("Error deleting borrow record.");
-      setMessageType("error");
+      showMessage("Error deleting borrow record.", "error");
     }
   };
 
@@ -161,15 +170,16 @@ function BookBorrow() {
       <h1>Book Borrow</h1>
       {message && (
         <p
+          className={`message ${messageType}`}
           style={{
-            color: messageType === "success" ? "green" : "red",
-            fontSize: "18px",
+            color: messageType === "error" ? "red" : "green",
           }}
         >
           {message}
         </p>
       )}
-      <form onSubmit={(e) => e.preventDefault()}>
+
+      <form onSubmit={(e) => e.preventDefault()} className="search-form">
         <input
           type="number"
           placeholder="Enter Borrow ID"
@@ -178,10 +188,10 @@ function BookBorrow() {
           required
         />
         <button type="button" onClick={fetchBorrowById}>
-          Search by ID
+          Search
         </button>
         <button type="button" onClick={fetchAllBorrows}>
-          Get All Records
+          View All
         </button>
       </form>
 
@@ -226,7 +236,6 @@ function BookBorrow() {
           }
           onChange={handleInputChange}
           placeholder="Return Date"
-          required
         />
         <input
           type="number"
@@ -242,7 +251,9 @@ function BookBorrow() {
         />
         <button type="submit">{editingBorrow ? "Update" : "Add"}</button>
       </form>
-      {borrows.length > 0 && (
+
+      {/* Tabloyu sadece veriler geldiğinde ve View All veya Add tıklandığında göster */}
+      {showTable && borrows.length > 0 && (
         <table>
           <thead>
             <tr>
@@ -251,8 +262,7 @@ function BookBorrow() {
               <th>Borrower Mail</th>
               <th>Borrowing Date</th>
               <th>Return Date</th>
-              <th>Book ID</th>
-              <th>Operations</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -262,8 +272,7 @@ function BookBorrow() {
                 <td>{borrow.borrowerName}</td>
                 <td>{borrow.borrowerMail}</td>
                 <td>{borrow.borrowingDate}</td>
-                <td>{borrow.returnDate ? borrow.returnDate : "N/A"}</td>
-                <td>{borrow.book?.id || "N/A"}</td>
+                <td>{borrow.returnDate || "Not Returned"}</td>
                 <td>
                   <button onClick={() => handleEditClick(borrow)}>Edit</button>
                   <button onClick={() => handleDeleteBorrow(borrow.id)}>

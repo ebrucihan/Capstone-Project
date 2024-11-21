@@ -22,6 +22,7 @@ function Books() {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
   const [searchId, setSearchId] = useState("");
+  const [tableVisible, setTableVisible] = useState(false); // Yeni state ekledik
 
   useEffect(() => {
     fetchAllAuthors();
@@ -97,13 +98,20 @@ function Books() {
       !newBook.publisher.id ||
       newBook.categories.length === 0
     ) {
-      setMessage("Author, Publisher, and Categories are required!");
       setMessageType("error");
       return;
     }
     try {
+      // Kitap ekleme işlemi
       const addedBook = await BooksService.addBook(newBook);
-      setBooks([...books, addedBook]);
+
+      // Kitap başarıyla eklendi, hemen listeyi güncelle
+      await fetchAllBooks();
+
+      // Tabloyu görünür yap
+      setTableVisible(true);
+
+      // Formu sıfırla
       setNewBook({
         name: "",
         publicationYear: 0,
@@ -112,6 +120,8 @@ function Books() {
         publisher: { id: "" },
         categories: [],
       });
+
+      // Başarı mesajı göster
       setMessage("Book added successfully!");
       setMessageType("success");
     } catch (error) {
@@ -149,22 +159,12 @@ function Books() {
       return;
     }
     try {
-      const updatedBook = await BooksService.updateBook(
-        editingBook.id,
-        newBook
+      await BooksService.updateBook(editingBook.id, newBook);
+      const updatedBooks = books.map((book) =>
+        book.id === editingBook.id ? newBook : book
       );
-      setBooks(
-        books.map((book) => (book.id === updatedBook.id ? updatedBook : book))
-      );
+      setBooks(updatedBooks);
       setEditingBook(null);
-      setNewBook({
-        name: "",
-        publicationYear: 0,
-        stock: 0,
-        author: { id: "" },
-        publisher: { id: "" },
-        categories: [],
-      });
       setMessage("Book updated successfully!");
       setMessageType("success");
     } catch (error) {
@@ -173,10 +173,11 @@ function Books() {
     }
   };
 
-  const handleDeleteBook = async (id) => {
+  const handleDeleteClick = async (id) => {
     try {
       await BooksService.deleteBook(id);
-      setBooks(books.filter((book) => book.id !== id));
+      const remainingBooks = books.filter((book) => book.id !== id);
+      setBooks(remainingBooks);
       setMessage("Book deleted successfully!");
       setMessageType("success");
     } catch (error) {
@@ -185,151 +186,177 @@ function Books() {
     }
   };
 
-  const handleSearchById = async (e) => {
-    e.preventDefault();
+  const handleSearchChange = (e) => {
+    setSearchId(e.target.value);
+  };
+
+  const handleSearchBook = async () => {
+    if (!searchId) {
+      setMessage("Please enter a book ID.");
+      setMessageType("error");
+      return;
+    }
     try {
-      const book = await BooksService.getBookById(searchId);
-      setBooks([book]);
-      setMessage("Book found!");
-      setMessageType("success");
+      const foundBook = await BooksService.getBookById(searchId);
+      if (foundBook) {
+        setBooks([foundBook]); // Sadece bulunan kitabı gösteriyoruz
+        setMessage("Book found!");
+        setMessageType("success");
+      } else {
+        setMessage("Book not found.");
+        setMessageType("error");
+        setBooks([]); // Eğer kitap bulunmazsa, kitap listesini temizle
+      }
+      setTableVisible(true); // Tabloyu görünür yap
     } catch (error) {
-      setMessage("Error fetching book by ID.");
+      setMessage("Error finding book.");
       setMessageType("error");
     }
   };
 
+  const handleGetAllBooks = async () => {
+    await fetchAllBooks();
+    setTableVisible(true); // Tablonun görünür olmasını sağlıyoruz
+  };
   return (
     <div className="book-content">
       <h1>Books</h1>
       {message && (
         <p
           style={{
-            color: messageType === "success" ? "green" : "red",
-            fontSize: "18px",
-            fontWeight: "bold",
-            marginBottom: "20px",
+            color: messageType === "error" ? "red" : "green",
           }}
         >
           {message}
         </p>
       )}
-      <form onSubmit={handleSearchById}>
+
+      <div className="get-all-section">
+        <button onClick={handleGetAllBooks}>View All</button>
+      </div>
+      <br />
+      <div className="search-section">
         <input
           type="number"
-          placeholder="Enter Book ID"
           value={searchId}
-          onChange={(e) => setSearchId(e.target.value)}
-          required
+          onChange={handleSearchChange}
+          placeholder="Enter Book ID"
         />
-        <button type="submit">Search by ID</button>
-        <button type="button" onClick={fetchAllBooks}>
-          Get All Books
-        </button>
-      </form>
+        <button onClick={handleSearchBook}>Search</button>
+      </div>
+
       <form onSubmit={editingBook ? handleUpdateBook : handleAddBook}>
-        <input
-          type="text"
-          name="name"
-          value={newBook.name}
-          onChange={handleInputChange}
-          placeholder="Book Name"
-          required
-        />
-        <input
-          type="number"
-          name="publicationYear"
-          value={newBook.publicationYear}
-          onChange={handleInputChange}
-          placeholder="Publication Year"
-          required
-        />
-        <input
-          type="number"
-          name="stock"
-          value={newBook.stock}
-          onChange={handleInputChange}
-          placeholder="Stock"
-          required
-        />
-        <select
-          name="authorId"
-          value={newBook.author.id}
-          onChange={handleInputChange}
-          required
-        >
-          <option value="">Select Author</option>
-          {authors.map((author) => (
-            <option key={author.id} value={author.id}>
-              {author.name}
-            </option>
-          ))}
-        </select>
-        <select
-          name="publisherId"
-          value={newBook.publisher.id}
-          onChange={handleInputChange}
-          required
-        >
-          <option value="">Select Publisher</option>
-          {publishers.map((publisher) => (
-            <option key={publisher.id} value={publisher.id}>
-              {publisher.name}
-            </option>
-          ))}
-        </select>
-        <select
-          name="categoryIds"
-          value={newBook.categories.map((cat) => cat.id)}
-          onChange={handleInputChange}
-          multiple
-          required
-        >
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
+        <div className="form-group">
+          <label>Book Name</label>
+          <input
+            type="text"
+            name="name"
+            value={newBook.name}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="form-group">
+          <label>Publication Year</label>
+          <input
+            type="number"
+            name="publicationYear"
+            value={newBook.publicationYear}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="form-group">
+          <label>Stock</label>
+          <input
+            type="number"
+            name="stock"
+            value={newBook.stock}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="form-group">
+          <label>Author</label>
+          <select
+            name="authorId"
+            value={newBook.author.id}
+            onChange={handleInputChange}
+          >
+            <option value="">Select Author</option>
+            {authors.map((author) => (
+              <option key={author.id} value={author.id}>
+                {author.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Publisher</label>
+          <select
+            name="publisherId"
+            value={newBook.publisher.id}
+            onChange={handleInputChange}
+          >
+            <option value="">Select Publisher</option>
+            {publishers.map((publisher) => (
+              <option key={publisher.id} value={publisher.id}>
+                {publisher.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Categories</label>
+          <select
+            name="categoryIds"
+            multiple
+            value={newBook.categories.map((cat) => cat.id)}
+            onChange={handleInputChange}
+          >
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <button type="submit">{editingBook ? "Update" : "Add"}</button>
       </form>
-      {books.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Year</th>
-              <th>Stock</th>
-              <th>Author</th>
-              <th>Publisher</th>
-              <th>Categories</th>
-              <th>Operations</th>
-            </tr>
-          </thead>
-          <tbody>
-            {books.map((book) => (
-              <tr key={book.id}>
-                <td>{book.id}</td>
-                <td>{book.name}</td>
-                <td>{book.publicationYear}</td>
-                <td>{book.stock}</td>
-                <td>{book.author?.name || "N/A"}</td>
-                <td>{book.publisher?.name || "N/A"}</td>
-                <td>
-                  {book.categories && book.categories.length > 0
-                    ? book.categories.map((cat) => cat.name).join(", ")
-                    : "N/A"}
-                </td>
-                <td>
-                  <button onClick={() => handleEditClick(book)}>Edit</button>
-                  <button onClick={() => handleDeleteBook(book.id)}>
-                    Delete
-                  </button>
-                </td>
+
+      {tableVisible && (
+        <div className="books-list">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th> {/* ID başlığı eklendi */}
+                <th>Book Name</th>
+                <th>Publication Year</th>
+                <th>Stock</th>
+                <th>Author</th>
+                <th>Publisher</th>
+                <th>Categories</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {books.map((book) => (
+                <tr key={book.id}>
+                  <td>{book.id}</td> {/* ID değeri burada gösteriliyor */}
+                  <td>{book.name}</td>
+                  <td>{book.publicationYear}</td>
+                  <td>{book.stock}</td>
+                  <td>{book.author.name}</td>
+                  <td>{book.publisher.name}</td>
+                  <td>{book.categories.map((cat) => cat.name).join(", ")}</td>
+                  <td>
+                    <button onClick={() => handleEditClick(book)}>Edit</button>
+                    <button onClick={() => handleDeleteClick(book.id)}>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
