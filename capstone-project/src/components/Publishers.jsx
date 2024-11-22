@@ -10,20 +10,23 @@ function Publishers() {
     address: "",
   });
   const [editingPublisher, setEditingPublisher] = useState(null);
-  const [searchId, setSearchId] = useState(""); // Aranacak ID
+  const [searchId, setSearchId] = useState("");
   const [message, setMessage] = useState("");
 
   const fetchAllPublishers = async () => {
     try {
-      const data = await PublisherService.getPublishers(); // getAllPublishers yerine getPublishers kullanıldı
+      const data = await PublisherService.getPublishers();
       setPublishers(data);
       setMessage("All publishers have been successfully uploaded!");
+
+      // Sayfayı aşağı kaydır
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       console.error(
-        "An error occurred while pulling all the broadcasters:",
+        "An error occurred while pulling all the publishers:",
         error
       );
-      setMessage("An error occurred while pulling all broadcasters.");
+      setMessage("An error occurred while pulling all publishers.");
     }
   };
 
@@ -31,13 +34,15 @@ function Publishers() {
     try {
       const data = await PublisherService.getPublisherById(searchId);
       if (data) {
-        setPublishers([data]); // Sadece aranan ID'ye sahip yayınevini göster
+        setPublishers([data]);
         setMessage(
           `The publishing house with ID ${searchId} was found successfully!`
         );
       } else {
-        setMessage(`No publisher found with ID ${searchId} `);
+        setMessage(`No publisher found with ID ${searchId}`);
       }
+      // Sayfayı aşağı kaydır
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       console.error(
         "An error occurred while searching for a publisher:",
@@ -63,15 +68,18 @@ function Publishers() {
       setPublishers([...publishers, addedPublisher]);
       setNewPublisher({ name: "", establishmentYear: 0, address: "" });
       setMessage("Publisher added successfully!");
+
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       console.error("An error occurred while adding a publisher:", error);
-      setMessage("An error occurred while adding the publisher.");
+      setMessage("An error occurred while adding a publisher.");
     }
   };
 
   const handleEditClick = (publisher) => {
     setEditingPublisher(publisher);
     setMessage("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleUpdatePublisher = async (e) => {
@@ -89,6 +97,8 @@ function Publishers() {
       );
       setEditingPublisher(null);
       setMessage("Publisher updated successfully!");
+
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       console.error("An error occurred while updating the publisher:", error);
       setMessage("An error occurred while updating the publisher.");
@@ -100,6 +110,9 @@ function Publishers() {
       await PublisherService.deletePublisher(id);
       setPublishers(publishers.filter((publisher) => publisher.id !== id));
       setMessage("Publisher successfully deleted!");
+
+      // Sayfayı üst kısma kaydır
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       console.error("An error occurred while deleting the publisher:", error);
       setMessage("An error occurred while deleting the publisher.");
@@ -115,7 +128,7 @@ function Publishers() {
         </p>
       )}
 
-      <button onClick={fetchAllPublishers}>Get All Publishers</button>
+      <button onClick={fetchAllPublishers}>View All</button>
 
       <div>
         <input
@@ -124,7 +137,7 @@ function Publishers() {
           value={searchId}
           onChange={(e) => setSearchId(e.target.value)}
         />
-        <button onClick={fetchPublisherById}>Search by ID</button>
+        <button onClick={fetchPublisherById}>Search</button>
       </div>
 
       <form

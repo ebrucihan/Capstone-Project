@@ -22,8 +22,7 @@ function Books() {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
   const [searchId, setSearchId] = useState("");
-  const [tableVisible, setTableVisible] = useState(false); // Yeni state ekledik
-
+  const [tableVisible, setTableVisible] = useState(false);
   useEffect(() => {
     fetchAllAuthors();
     fetchAllPublishers();
@@ -34,11 +33,12 @@ function Books() {
     try {
       const data = await BooksService.getBooks();
       setBooks(data);
-      setMessage("All books loaded.");
+      setMessage("All books have been successfully loaded!");
       setMessageType("success");
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      setMessage("Error loading books.");
-      setMessageType("error");
+      console.error("An error occurred while pulling all the books:", error);
+      setMessage("An error occurred while pulling all books.");
     }
   };
 
@@ -102,16 +102,12 @@ function Books() {
       return;
     }
     try {
-      // Kitap ekleme işlemi
       const addedBook = await BooksService.addBook(newBook);
 
-      // Kitap başarıyla eklendi, hemen listeyi güncelle
       await fetchAllBooks();
 
-      // Tabloyu görünür yap
       setTableVisible(true);
 
-      // Formu sıfırla
       setNewBook({
         name: "",
         publicationYear: 0,
@@ -124,14 +120,17 @@ function Books() {
       // Başarı mesajı göster
       setMessage("Book added successfully!");
       setMessageType("success");
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      setMessage("Error adding book.");
-      setMessageType("error");
+      console.error("An error occurred while adding the book:", error);
+      setMessage("An error occurred while adding the book.");
     }
   };
 
   const handleEditClick = (book) => {
     setEditingBook(book);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
     setNewBook({
       name: book.name,
       publicationYear: book.publicationYear,
@@ -141,35 +140,46 @@ function Books() {
       categories: book.categories || [],
     });
   };
-
   const handleUpdateBook = async (e) => {
     e.preventDefault();
+
     if (!newBook.name || !newBook.publicationYear || !newBook.stock) {
       setMessage("All fields must be filled!");
       setMessageType("error");
       return;
     }
-    if (
-      !newBook.author.id ||
-      !newBook.publisher.id ||
-      newBook.categories.length === 0
-    ) {
-      setMessage("Author, Publisher, and Categories are required!");
-      setMessageType("error");
-      return;
-    }
+
     try {
-      await BooksService.updateBook(editingBook.id, newBook);
-      const updatedBooks = books.map((book) =>
-        book.id === editingBook.id ? newBook : book
+      // API üzerinden kitabı güncelle
+      const updatedBook = await BooksService.updateBook(
+        editingBook.id,
+        newBook
       );
-      setBooks(updatedBooks);
+
+      // Güncellenen kitabı tabloya direkt olarak yansıt
+      setBooks((prevBooks) =>
+        prevBooks.map((book) =>
+          book.id === editingBook.id ? { ...book, ...updatedBook } : book
+        )
+      );
+
+      // Formu sıfırla
       setEditingBook(null);
+      setNewBook({
+        name: "",
+        publicationYear: 0,
+        stock: 0,
+        author: { id: "" },
+        publisher: { id: "" },
+        categories: [],
+      });
+
       setMessage("Book updated successfully!");
       setMessageType("success");
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      setMessage("Error updating book.");
-      setMessageType("error");
+      console.error("An error occurred while updating the book:", error);
+      setMessage("An error occurred while updating the book.");
     }
   };
 
@@ -180,9 +190,11 @@ function Books() {
       setBooks(remainingBooks);
       setMessage("Book deleted successfully!");
       setMessageType("success");
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
-      setMessage("Error deleting book.");
-      setMessageType("error");
+      console.error("An error occurred while deleting the book:", error);
+      setMessage("An error occurred while deleting the book.");
     }
   };
 
@@ -200,17 +212,18 @@ function Books() {
       const foundBook = await BooksService.getBookById(searchId);
       if (foundBook) {
         setBooks([foundBook]); // Sadece bulunan kitabı gösteriyoruz
-        setMessage("Book found!");
+        setMessage(`Book with ID ${searchId} found successfully!`);
         setMessageType("success");
       } else {
-        setMessage("Book not found.");
+        setMessage(`No book found with ID ${searchId}!`);
         setMessageType("error");
-        setBooks([]); // Eğer kitap bulunmazsa, kitap listesini temizle
+        setBooks([]);
       }
       setTableVisible(true); // Tabloyu görünür yap
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      setMessage("Error finding book.");
-      setMessageType("error");
+      console.error("An error occurred while searching for a book:", error);
+      setMessage("An error occurred while searching for a book.");
     }
   };
 
@@ -333,7 +346,7 @@ function Books() {
                 <th>Author</th>
                 <th>Publisher</th>
                 <th>Categories</th>
-                <th>Actions</th>
+                <th>Operations</th>
               </tr>
             </thead>
             <tbody>

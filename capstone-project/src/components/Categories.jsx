@@ -11,33 +11,39 @@ function Categories() {
   const [editingCategory, setEditingCategory] = useState(null);
   const [searchId, setSearchId] = useState("");
   const [message, setMessage] = useState("");
-  const [showTable, setShowTable] = useState(false); // Tabloyu gösterme durumu
+  const [showTable, setShowTable] = useState(false);
 
   const fetchAllCategories = async () => {
     try {
       const data = await CategoriesService.getCategories();
       setCategories(data);
-      setShowTable(true); // "Get All Categories" butonuna basıldığında tabloyu göster
+      setShowTable(true);
       setMessage("All categories have been successfully loaded!");
+      // Sayfayı aşağı kaydır
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      console.error("Error loading categories:", error);
-      setMessage("Error loading categories.");
+      console.error(
+        "An error occurred while pulling all the categories:",
+        error
+      );
+      setMessage("An error occurred while pulling all categories.");
     }
   };
-
   const fetchCategoryById = async () => {
     try {
       const data = await CategoriesService.getCategoryById(searchId);
       if (data) {
         setCategories([data]);
-        setShowTable(true); // Tek bir kategori arandığında tabloyu göster
+        setShowTable(true);
         setMessage(`Category with ID ${searchId} found successfully!`);
       } else {
         setMessage(`No category found with ID ${searchId}`);
       }
+      // Sayfayı aşağı kaydır
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      console.error("Error searching for category:", error);
-      setMessage("Error searching for category.");
+      console.error("An error occurred while searching for a category:", error);
+      setMessage("An error occurred while searching for a category.");
     }
   };
 
@@ -57,16 +63,19 @@ function Categories() {
       setCategories([...categories, addedCategory]);
       setNewCategory({ name: "", description: "" });
       setMessage("Category added successfully!");
-      setShowTable(true); // Yeni kategori eklendiğinde tabloyu göster
+      setShowTable(true);
+
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      console.error("Error adding category:", error);
-      setMessage("Error adding category.");
+      console.error("An error occurred while adding a category:", error);
+      setMessage("An error occurred while adding a category.");
     }
   };
 
   const handleEditClick = (category) => {
     setEditingCategory(category);
     setMessage("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleUpdateCategory = async (e) => {
@@ -83,22 +92,25 @@ function Categories() {
       );
       setEditingCategory(null);
       setMessage("Category updated successfully!");
-      setShowTable(true); // Güncelleme sonrasında tabloyu göster
+      setShowTable(true);
+
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      console.error("Error updating category:", error);
-      setMessage("Error updating category.");
+      console.error("An error occurred while updating the category:", error);
+      setMessage("An error occurred while updating the category.");
     }
   };
-
   const handleDeleteCategory = async (id) => {
     try {
       await CategoriesService.deleteCategory(id);
       setCategories(categories.filter((category) => category.id !== id));
       setMessage("Category deleted successfully!");
-      setShowTable(true); // Silme sonrasında tabloyu göster
+      setShowTable(true);
+      // Sayfayı üst kısma kaydır
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
-      console.error("Error deleting category:", error);
-      setMessage("Error deleting category.");
+      console.error("An error occurred while deleting the category:", error);
+      setMessage("An error occurred while deleting the category.");
     }
   };
 
@@ -115,7 +127,7 @@ function Categories() {
         </p>
       )}
 
-      <button onClick={fetchAllCategories}>Get All Categories</button>
+      <button onClick={fetchAllCategories}>View All</button>
 
       <div>
         <input
@@ -124,7 +136,7 @@ function Categories() {
           value={searchId}
           onChange={(e) => setSearchId(e.target.value)}
         />
-        <button onClick={fetchCategoryById}>Search by ID</button>
+        <button onClick={fetchCategoryById}>Search</button>
       </div>
 
       <form
@@ -153,36 +165,35 @@ function Categories() {
         <button type="submit">{editingCategory ? "Update" : "Add"}</button>
       </form>
 
-      {showTable &&
-        categories.length > 0 && ( // Tabloyu yalnızca showTable true olduğunda göster
-          <table border="1" cellPadding="10" style={{ marginTop: "20px" }}>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Category Name</th>
-                <th>Description</th>
-                <th>Operations</th>
+      {showTable && categories.length > 0 && (
+        <table border="1" cellPadding="10" style={{ marginTop: "20px" }}>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Category Name</th>
+              <th>Description</th>
+              <th>Operations</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((category) => (
+              <tr key={category.id}>
+                <td>{category.id}</td>
+                <td>{category.name}</td>
+                <td>{category.description}</td>
+                <td>
+                  <button onClick={() => handleEditClick(category)}>
+                    Edit
+                  </button>
+                  <button onClick={() => handleDeleteCategory(category.id)}>
+                    Delete
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {categories.map((category) => (
-                <tr key={category.id}>
-                  <td>{category.id}</td>
-                  <td>{category.name}</td>
-                  <td>{category.description}</td>
-                  <td>
-                    <button onClick={() => handleEditClick(category)}>
-                      Edit
-                    </button>
-                    <button onClick={() => handleDeleteCategory(category.id)}>
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

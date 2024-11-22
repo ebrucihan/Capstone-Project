@@ -20,9 +20,11 @@ function Authors() {
       setAuthors(data);
       setShowTable(true); // "Get All Authors" butonuna basıldığında tabloyu göster
       setMessage("All authors have been successfully loaded!");
+      // Sayfayı aşağı kaydır
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      console.error("Error loading authors:", error);
-      setMessage("Error loading authors.");
+      console.error("An error occurred while pulling all the authors:", error);
+      setMessage("An error occurred while pulling all authors.");
     }
   };
 
@@ -36,12 +38,13 @@ function Authors() {
       } else {
         setMessage(`No author found with ID ${searchId}`);
       }
+      // Sayfayı aşağı kaydır
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      console.error("Error searching for author:", error);
-      setMessage("Error searching for author.");
+      console.error("An error occurred while searching for a authors:", error);
+      setMessage("An error occurred while searching for a authors.");
     }
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (editingAuthor) {
@@ -59,15 +62,18 @@ function Authors() {
       setNewAuthor({ name: "", birthDate: "", country: "" });
       setMessage("Author added successfully!");
       setShowTable(true); // Yeni yazar eklendiğinde tabloyu göster
+
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      console.error("Error adding author:", error);
-      setMessage("Error adding author.");
+      console.error("An error occurred while adding the author:", error);
+      setMessage("An error occurred while adding the author.");
     }
   };
 
   const handleEditClick = (author) => {
     setEditingAuthor(author);
     setMessage("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleUpdateAuthor = async (e) => {
@@ -85,9 +91,11 @@ function Authors() {
       setEditingAuthor(null);
       setMessage("Author updated successfully!");
       setShowTable(true); // Güncelleme sonrasında tabloyu göster
+
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      console.error("Error updating author:", error);
-      setMessage("Error updating author.");
+      console.error("An error occurred while updating the author:", error);
+      setMessage("An error occurred while updating the author.");
     }
   };
 
@@ -97,9 +105,11 @@ function Authors() {
       setAuthors(authors.filter((author) => author.id !== id));
       setMessage("Author deleted successfully!");
       setShowTable(true); // Silme sonrasında tabloyu göster
+      // Sayfayı üst kısma kaydır
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
-      console.error("Error deleting author:", error);
-      setMessage("Error deleting author.");
+      console.error("An error occurred while deleting the author:", error);
+      setMessage("An error occurred while deleting the author.");
     }
   };
 
@@ -116,7 +126,7 @@ function Authors() {
         </p>
       )}
 
-      <button onClick={fetchAllAuthors}>Get All Authors</button>
+      <button onClick={fetchAllAuthors}>View All</button>
 
       <div>
         <input
@@ -125,7 +135,7 @@ function Authors() {
           value={searchId}
           onChange={(e) => setSearchId(e.target.value)}
         />
-        <button onClick={fetchAuthorById}>Search by ID</button>
+        <button onClick={fetchAuthorById}>Search</button>
       </div>
 
       <form onSubmit={editingAuthor ? handleUpdateAuthor : handleAddAuthor}>

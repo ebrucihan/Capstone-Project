@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import BorrowService from "../services/BorrowService";
+import BooksService from "../services/BooksService";
 import "../css/BookBorrow.css";
 
 function BookBorrow() {
@@ -15,20 +16,18 @@ function BookBorrow() {
   const [searchId, setSearchId] = useState("");
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
-  const [showTable, setShowTable] = useState(false); // Tabloyu kontrol etmek için state, başlangıçta false
-
-  useEffect(() => {
-    fetchAllBorrows();
-  }, []);
+  const [showTable, setShowTable] = useState(false);
 
   const fetchAllBorrows = async () => {
     try {
       const data = await BorrowService.getAllBorrows();
       setBorrows(data);
+      setShowTable(true);
       showMessage("All borrow records successfully loaded!", "success");
-      setShowTable(true); // Veriler başarıyla yüklendiğinde tabloyu göster
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      showMessage("Error loading borrow records.", "error");
+      console.error("An error occurred while pulling all the borrows:", error);
+      setMessage("An error occurred while pulling all borrows.");
     }
   };
 
@@ -37,8 +36,16 @@ function BookBorrow() {
       const data = await BorrowService.getBorrowById(searchId);
       if (data) {
         setBorrows([data]);
-        showMessage("Borrow record found!", "success");
+        showMessage(
+          `Book borrow with ID ${searchId} found successfully!`,
+          "success"
+        );
         setShowTable(true); // ID ile arama yapıldığında tabloyu göster
+
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: "smooth",
+        });
       } else {
         showMessage("No borrow record found with this ID.", "error");
         setShowTable(false); // Kayıt bulunmazsa tabloyu gizle
@@ -105,7 +112,22 @@ function BookBorrow() {
     e.preventDefault();
     if (!validateForm(newBorrow, false)) return;
 
+    const bookId = newBorrow.bookForBorrowingRequest.id;
+
     try {
+      // Kitap verisini al
+      const book = await BooksService.getBookById(bookId); // BooksService.getBookById ile kitap bilgilerini al
+
+      // Kitap stoğu kontrolü
+      if (book.stock <= 0) {
+        showMessage(
+          "There is no stock of books left, you cannot borrow them.",
+          "error"
+        );
+        return; // Kitap stoğu tükenmişse işlem yapılmaz
+      }
+
+      // Kitap stoğu yeterliyse ödünç kaydını ekle
       const addedBorrow = await BorrowService.addBorrow(newBorrow);
       setBorrows([...borrows, addedBorrow]);
       setNewBorrow({
@@ -115,10 +137,11 @@ function BookBorrow() {
         returnDate: "",
         bookForBorrowingRequest: { id: "" },
       });
-      showMessage("Borrow record added successfully!", "success");
-      setShowTable(true); // Yeni ekleme ile tabloyu göster
+      showMessage("Borrowing record added successfully!", "success");
+      setShowTable(true);
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
-      showMessage("Error adding borrow record.", "error");
+      showMessage("An error occurred: ", "error");
     }
   };
 
@@ -131,6 +154,7 @@ function BookBorrow() {
       returnDate: borrow.returnDate || "",
       bookForBorrowingRequest: { id: borrow.book?.id || "" },
     });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleUpdateBorrow = async (e) => {
@@ -150,6 +174,8 @@ function BookBorrow() {
       );
       setEditingBorrow(null);
       showMessage("Borrow record updated successfully!", "success");
+      setShowTable(true);
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       showMessage("Error updating borrow record.", "error");
     }
@@ -160,6 +186,8 @@ function BookBorrow() {
       await BorrowService.deleteBorrow(id);
       setBorrows(borrows.filter((borrow) => borrow.id !== id));
       showMessage("Borrow record deleted successfully!", "success");
+      setShowTable(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       showMessage("Error deleting borrow record.", "error");
     }
@@ -262,7 +290,7 @@ function BookBorrow() {
               <th>Borrower Mail</th>
               <th>Borrowing Date</th>
               <th>Return Date</th>
-              <th>Actions</th>
+              <th>Operations</th>
             </tr>
           </thead>
           <tbody>
