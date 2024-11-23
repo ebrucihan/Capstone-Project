@@ -1,4 +1,4 @@
-# Library Management System
+# Capstone Project
 
 This project is a full-stack application designed to streamline the management of a library's operations. It enables administrators to manage authors, books, publishers, categories, and borrowings efficiently. With a user-friendly interface and robust backend, the system simplifies everyday library tasks.
 
