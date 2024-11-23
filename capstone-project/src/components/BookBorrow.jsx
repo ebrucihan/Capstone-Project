@@ -159,6 +159,16 @@ function BookBorrow() {
 
   const handleUpdateBorrow = async (e) => {
     e.preventDefault();
+
+    // Kullanıcının maili değiştirmeye çalıştığını kontrol et
+    if (
+      editingBorrow.borrowerMail !==
+      borrows.find((borrow) => borrow.id === editingBorrow.id)?.borrowerMail
+    ) {
+      showMessage("Email address cannot be updated!", "error");
+      return;
+    }
+
     if (!validateForm(editingBorrow, true)) return;
 
     try {
@@ -180,7 +190,6 @@ function BookBorrow() {
       showMessage("Error updating borrow record.", "error");
     }
   };
-
   const handleDeleteBorrow = async (id) => {
     try {
       await BorrowService.deleteBorrow(id);
