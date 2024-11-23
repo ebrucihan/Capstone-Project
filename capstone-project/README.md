@@ -33,6 +33,10 @@ You can explore the project live at this [Demo Link](https://your-demo-link.com)
 - **CSS**: For elegant and responsive UI design.
 - **React Router**: Navigation between different modules.
 - **Axios**: Handles API requests seamlessly.
+<<<<<<< HEAD
+=======
+
+>>>>>>> 228dbe8cbab3a80d26d9218b7b451a7f51faf971
 
 ### Backend:
 
