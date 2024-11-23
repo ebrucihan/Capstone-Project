@@ -8,7 +8,7 @@ The goal of this application is to provide an efficient solution for managing li
 
 ## Live Demo
 
-You can explore the project live at this [Demo Link](https://your-demo-link.com).
+You can explore the project live at this [Demo Link](https://ephemeral-pegasus-f389fa.netlify.app/).
 
 ## Features
 
