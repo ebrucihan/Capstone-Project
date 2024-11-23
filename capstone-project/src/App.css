@@ -1,4 +1,4 @@
-/* Genel Sayfa Stili */
+/* General Page Style */
 body {
   font-family: "Sour Gummy", sans-serif;
   margin: 0;
@@ -13,9 +13,9 @@ body {
     auto;
 }
 
-/* Navbar Stili */
+/* Navbar Style */
 .navbar {
-  background-color: transparent; /* Başlangıçta şeffaf */
+  background-color: transparent; /* Initially transparent */
   padding: 15px 30px;
   display: flex;
   justify-content: flex-start;
@@ -24,12 +24,12 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 10; /* Navbarın üstte kalması için */
-  transition: background-color 0.3s ease, opacity 0.5s ease; /* Renk ve opaklık geçişleri */
-  opacity: 1; /* Başlangıçta görünür */
+  z-index: 10; /* To keep the navbar on top */
+  transition: background-color 0.3s ease, opacity 0.5s ease; /* Color and opacity transitions */
+  opacity: 1; /* Initially visible */
 }
 
-/* Navbar linkleri */
+/* Navbar Links */
 .nav-links {
   list-style: none;
   display: flex;
@@ -47,5 +47,5 @@ body {
 }
 
 .nav-link:hover {
-  color: #ff9800; /* Link üzerine gelindiğinde renk değişimi */
+  color: #ff9800; /* Change color when hovering over the link */
 }

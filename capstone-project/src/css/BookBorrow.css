@@ -1,4 +1,4 @@
-/* BookBorrow.css */
+/* BookBorrow Main Content Container: This wraps the main content of the book borrowing page */
 .borrow-content {
   display: flex;
   flex-direction: column;
@@ -14,20 +14,21 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
+/* Styling for the title */
 .borrow-content h1 {
   font-size: 50px;
   color: #fff;
   margin-bottom: 20px;
 }
 
-/* Mesajlar */
+/* Styling for messages (typically status messages) */
 .borrow-content p {
   font-size: 20px;
   color: #fff;
   margin-bottom: 20px;
 }
 
-/* Arama Formu */
+/* Search Form: Styles and layout for the search form */
 .search-form {
   display: flex;
   align-items: center;
@@ -35,6 +36,7 @@
   margin-bottom: 20px;
 }
 
+/* Styling for number input field */
 .search-form input[type="number"] {
   padding: 10px;
   border-radius: 5px;
@@ -46,7 +48,7 @@
   font-family: "Sour Gummy", sans-serif;
 }
 
-/* Form Alanları İçin Genel Stil */
+/* Form layout and styling */
 .borrow-content form {
   display: flex;
   flex-wrap: wrap;
@@ -57,6 +59,7 @@
   margin-bottom: 20px;
 }
 
+/* Align form elements in a 3-column layout */
 .borrow-content form input {
   padding: 10px;
   border-radius: 5px;
@@ -70,9 +73,10 @@
 .borrow-content form .form-group {
   display: flex;
   flex-direction: column;
-  width: calc(33.33% - 20px); /* Üçlü yan yana */
+  width: calc(33.33% - 20px); /*Three columns */
 }
 
+/* Styling form input and select elements */
 .borrow-content form .form-group select,
 .borrow-content form .form-group input {
   padding: 10px;
@@ -84,10 +88,12 @@
   font-family: "Sour Gummy", sans-serif;
 }
 
+/* Different background color for select element */
 .borrow-content form .form-group select {
   background-color: #d84315;
 }
 
+/* Styling for form labels */
 .borrow-content form .form-group label {
   color: #fff;
   margin-bottom: 5px;
@@ -95,6 +101,7 @@
   font-size: 16px;
 }
 
+/* Button styling */
 .borrow-content button {
   font-family: "Sour Gummy", sans-serif;
   background-color: #d84315;
@@ -110,11 +117,12 @@
   margin: 5px; /* Butonlar arasına boşluk ekler */
 }
 
+/* Button hover effect */
 .borrow-content button:hover {
   background-color: #bf360c;
 }
 
-/* Tablo */
+/* Table layout and styling */
 .borrow-content table {
   width: 100%;
   max-width: 1000px;
@@ -122,6 +130,7 @@
   border-collapse: collapse;
 }
 
+/* Styling for table headers and cells */
 .borrow-content table th,
 .borrow-content table td {
   padding: 12px;
@@ -130,17 +139,18 @@
   text-align: center;
 }
 
+/* Different background color for table headers */
 .borrow-content table th {
   background-color: rgba(24, 23, 23, 0.8);
 }
 
+/* Different background color for every second row in the table */
 .borrow-content table tr:nth-child(even) {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Responsive Tasarım */
+/* Responsive Design: Layout adjustments for different device sizes */
 
-/* Tabletler ve Küçük Masaüstü Ekranlar için */
 @media (max-width: 768px) {
   .borrow-content {
     padding: 20px;
@@ -156,7 +166,7 @@
   }
 
   .borrow-content form .form-group {
-    width: 100%; /* Küçük ekranlarda tam genişlik */
+    width: 100%;
   }
 
   .borrow-content button {
@@ -164,7 +174,6 @@
   }
 }
 
-/* Mobil Cihazlar için */
 @media (max-width: 480px) {
   .borrow-content {
     padding: 15px;

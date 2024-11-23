@@ -4,25 +4,26 @@ import BooksService from "../services/BooksService";
 import "../css/BookBorrow.css";
 
 function BookBorrow() {
-  const [borrows, setBorrows] = useState([]);
+  const [borrows, setBorrows] = useState([]); // Holds all borrow records
   const [newBorrow, setNewBorrow] = useState({
     borrowerName: "",
     borrowerMail: "",
     borrowingDate: "",
     returnDate: "",
     bookForBorrowingRequest: { id: "" },
-  });
-  const [editingBorrow, setEditingBorrow] = useState(null);
-  const [searchId, setSearchId] = useState("");
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
-  const [showTable, setShowTable] = useState(false);
+  }); // Stores input data for a new borrow
+  const [editingBorrow, setEditingBorrow] = useState(null); // Tracks which borrow is being edited
+  const [searchId, setSearchId] = useState(""); // Stores the ID for search functionality
+  const [message, setMessage] = useState(""); // Stores messages to display to the user
+  const [messageType, setMessageType] = useState(""); // Defines the type of message (e.g., success or error)
+  const [showTable, setShowTable] = useState(false); // Controls the visibility of the borrow records table
 
+  // Fetches all borrow records
   const fetchAllBorrows = async () => {
     try {
       const data = await BorrowService.getAllBorrows();
-      setBorrows(data);
-      setShowTable(true);
+      setBorrows(data); // Updates the borrow records state
+      setShowTable(true); // Shows the table after loading records
       showMessage("All borrow records successfully loaded!", "success");
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
@@ -31,6 +32,7 @@ function BookBorrow() {
     }
   };
 
+  // Fetches a specific borrow record by ID
   const fetchBorrowById = async () => {
     try {
       const data = await BorrowService.getBorrowById(searchId);
@@ -40,7 +42,7 @@ function BookBorrow() {
           `Book borrow with ID ${searchId} found successfully!`,
           "success"
         );
-        setShowTable(true); // ID ile arama yapıldığında tabloyu göster
+        setShowTable(true);
 
         window.scrollTo({
           top: document.body.scrollHeight,
@@ -48,14 +50,15 @@ function BookBorrow() {
         });
       } else {
         showMessage("No borrow record found with this ID.", "error");
-        setShowTable(false); // Kayıt bulunmazsa tabloyu gizle
+        setShowTable(false);
       }
     } catch (error) {
       showMessage("Error searching for borrow record.", "error");
-      setShowTable(false); // Hata olursa tabloyu gizle
+      setShowTable(false);
     }
   };
 
+  // Displays a temporary message to the user
   const showMessage = (msg, type) => {
     setMessage(msg);
     setMessageType(type);
@@ -64,6 +67,7 @@ function BookBorrow() {
     }, 3000);
   };
 
+  // Handles changes to form inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === "bookId") {
@@ -75,12 +79,15 @@ function BookBorrow() {
         },
       });
     } else if (editingBorrow) {
+      // Updates the state of the currently edited borrow
       setEditingBorrow({ ...editingBorrow, [name]: value });
     } else {
+      // Updates the new borrow state
       setNewBorrow({ ...newBorrow, [name]: value });
     }
   };
 
+  // Validates the borrow form before submission
   const validateForm = (borrow, isUpdate) => {
     const {
       borrowerName,
@@ -90,6 +97,7 @@ function BookBorrow() {
       returnDate,
     } = borrow;
 
+    // Checks if required fields are not empty
     if (
       !borrowerName.trim() ||
       !borrowerMail.trim() ||
@@ -100,14 +108,15 @@ function BookBorrow() {
       return false;
     }
 
-    if (isUpdate && !returnDate.trim()) {
-      showMessage("Return Date is required for update!", "error");
+    if (isUpdate && returnDate.trim() && !borrowerName.trim()) {
+      showMessage("Return Date is required if you want to update it!", "error");
       return false;
     }
 
     return true;
   };
 
+  // Handles adding a new borrow record
   const handleAddBorrow = async (e) => {
     e.preventDefault();
     if (!validateForm(newBorrow, false)) return;
@@ -115,19 +124,17 @@ function BookBorrow() {
     const bookId = newBorrow.bookForBorrowingRequest.id;
 
     try {
-      // Kitap verisini al
-      const book = await BooksService.getBookById(bookId); // BooksService.getBookById ile kitap bilgilerini al
+      const book = await BooksService.getBookById(bookId);
 
-      // Kitap stoğu kontrolü
       if (book.stock <= 0) {
         showMessage(
           "There is no stock of books left, you cannot borrow them.",
           "error"
         );
-        return; // Kitap stoğu tükenmişse işlem yapılmaz
+        return;
       }
 
-      // Kitap stoğu yeterliyse ödünç kaydını ekle
+      // Adds the borrow record if stock is sufficient
       const addedBorrow = await BorrowService.addBorrow(newBorrow);
       setBorrows([...borrows, addedBorrow]);
       setNewBorrow({
@@ -136,7 +143,7 @@ function BookBorrow() {
         borrowingDate: "",
         returnDate: "",
         bookForBorrowingRequest: { id: "" },
-      });
+      }); // Resets the form
       showMessage("Borrowing record added successfully!", "success");
       setShowTable(true);
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
@@ -145,6 +152,7 @@ function BookBorrow() {
     }
   };
 
+  // Prepares a borrow record for editing
   const handleEditClick = (borrow) => {
     setEditingBorrow({
       id: borrow.id,
@@ -154,42 +162,68 @@ function BookBorrow() {
       returnDate: borrow.returnDate || "",
       bookForBorrowingRequest: { id: borrow.book?.id || "" },
     });
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "smooth" }); // Scrolls to the top for the form
   };
 
+  // Handles updating an existing borrow record
   const handleUpdateBorrow = async (e) => {
     e.preventDefault();
 
-    // Kullanıcının maili değiştirmeye çalıştığını kontrol et
-    if (
-      editingBorrow.borrowerMail !==
-      borrows.find((borrow) => borrow.id === editingBorrow.id)?.borrowerMail
-    ) {
+    // Ensures the email cannot be changed
+    const originalBorrow = borrows.find(
+      (borrow) => borrow.id === editingBorrow.id
+    );
+    if (editingBorrow.borrowerMail !== originalBorrow?.borrowerMail) {
       showMessage("Email address cannot be updated!", "error");
       return;
     }
-
+    // Validates the edit form
     if (!validateForm(editingBorrow, true)) return;
 
+    if (
+      editingBorrow.returnDate.trim() &&
+      new Date(editingBorrow.returnDate) < new Date(editingBorrow.borrowingDate)
+    ) {
+      showMessage(
+        "Return date cannot be earlier than borrowing date!",
+        "error"
+      );
+      return;
+    }
+
     try {
-      const updatedBorrow = await BorrowService.updateBorrow(editingBorrow.id, {
+      const updateData = {
         borrowerName: editingBorrow.borrowerName,
         borrowingDate: editingBorrow.borrowingDate,
-        returnDate: editingBorrow.returnDate,
-      });
+      };
+
+      if (editingBorrow.returnDate.trim()) {
+        updateData.returnDate = editingBorrow.returnDate;
+      }
+
+      const updatedBorrow = await BorrowService.updateBorrow(
+        editingBorrow.id,
+        updateData
+      );
+      // Updates the state with the edited borrow record
       setBorrows(
         borrows.map((borrow) =>
           borrow.id === updatedBorrow.id ? updatedBorrow : borrow
         )
       );
+
       setEditingBorrow(null);
+
       showMessage("Borrow record updated successfully!", "success");
       setShowTable(true);
+
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       showMessage("Error updating borrow record.", "error");
     }
   };
+
+  // Deletes a borrow record
   const handleDeleteBorrow = async (id) => {
     try {
       await BorrowService.deleteBorrow(id);
@@ -289,7 +323,7 @@ function BookBorrow() {
         <button type="submit">{editingBorrow ? "Update" : "Add"}</button>
       </form>
 
-      {/* Tabloyu sadece veriler geldiğinde ve View All veya Add tıklandığında göster */}
+      {/* The table is only shown when the data arrives and View All or Add is clicked */}
       {showTable && borrows.length > 0 && (
         <table>
           <thead>

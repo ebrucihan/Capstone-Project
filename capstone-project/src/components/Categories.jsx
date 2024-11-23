@@ -3,6 +3,7 @@ import CategoriesService from "../services/CategoriesService";
 import "../css/Category.css";
 
 function Categories() {
+  // State hooks for categories, new category input, editing category, search ID, message, and table visibility
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState({
     name: "",
@@ -13,13 +14,14 @@ function Categories() {
   const [message, setMessage] = useState("");
   const [showTable, setShowTable] = useState(false);
 
+  // Fetch all categories and display in the table
   const fetchAllCategories = async () => {
     try {
       const data = await CategoriesService.getCategories();
       setCategories(data);
       setShowTable(true);
       setMessage("All categories have been successfully loaded!");
-      // Sayfayı aşağı kaydır
+      // Scroll to the bottom of the page
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       console.error(
@@ -29,6 +31,8 @@ function Categories() {
       setMessage("An error occurred while pulling all categories.");
     }
   };
+
+  // Fetch a single category by ID
   const fetchCategoryById = async () => {
     try {
       const data = await CategoriesService.getCategoryById(searchId);
@@ -39,7 +43,7 @@ function Categories() {
       } else {
         setMessage(`No category found with ID ${searchId}`);
       }
-      // Sayfayı aşağı kaydır
+      // Scroll to the bottom of the page
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       console.error("An error occurred while searching for a category:", error);
@@ -47,6 +51,7 @@ function Categories() {
     }
   };
 
+  // Handle input changes for add/edit forms
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (editingCategory) {
@@ -55,7 +60,7 @@ function Categories() {
       setNewCategory({ ...newCategory, [name]: value });
     }
   };
-
+  // Add a new category
   const handleAddCategory = async (e) => {
     e.preventDefault();
     try {
@@ -72,12 +77,13 @@ function Categories() {
     }
   };
 
+  // Activate edit mode for a category
   const handleEditClick = (category) => {
     setEditingCategory(category);
     setMessage("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
+  // Update an existing category
   const handleUpdateCategory = async (e) => {
     e.preventDefault();
     try {
@@ -100,6 +106,8 @@ function Categories() {
       setMessage("An error occurred while updating the category.");
     }
   };
+
+  // Delete a category by ID
   const handleDeleteCategory = async (id) => {
     try {
       await CategoriesService.deleteCategory(id);

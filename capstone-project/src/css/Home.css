@@ -1,4 +1,4 @@
-/* Ana İçerik Konteyneri */
+/* Main Content Container */
 .home-content {
   display: flex;
   align-items: center;
@@ -13,11 +13,11 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Soldaki Metin ve Buton Bölümü */
+/* Left Text and Button Section */
 .home-text {
   width: 45%;
   padding: 20px;
-  z-index: 2; /* Metnin arka plan şeklinin üstünde görünmesini sağlıyor */
+  z-index: 2; /* Ensures text appears above background */
 }
 
 h1.home {
@@ -35,14 +35,14 @@ p.home-intro {
 
 .btn-learn-more {
   display: inline-block;
-  background-color: #d84315;
+  background-color: #d84315; /* Button color */
   color: #fff;
   padding: 12px 24px;
-  border-radius: 5px;
+  border-radius: 5px; /* Rounded button corners */
   font-size: 16px;
   font-weight: bold;
   text-decoration: none;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease; /* Smooth color transition */
 }
 
 .btn-learn-more:hover {

@@ -3,31 +3,31 @@ import axios from "axios";
 const API_URL =
   "https://nearby-abra-patikadev-11eb29a9.koyeb.app/api/v1/categories";
 
-// Tüm kategorileri getirmek için GET isteği
+// GET request to fetch all categories
 const getCategories = async () => {
   const response = await axios.get(API_URL);
   return response.data;
 };
 
-// Belirli bir ID'ye sahip kategoriyi getirmek için GET isteği
+// GET request to fetch a specific category by its ID
 const getCategoryById = async (id) => {
   const response = await axios.get(`${API_URL}/${id}`);
   return response.data;
 };
 
-// Yeni bir kategori eklemek için POST isteği
+// POST request to add a new category
 const addCategory = async (category) => {
   const response = await axios.post(API_URL, category);
   return response.data;
 };
 
-// Kategori güncellemek için PUT isteği
+// PUT request to update an existing category
 const updateCategory = async (id, updatedCategory) => {
   const response = await axios.put(`${API_URL}/${id}`, updatedCategory);
   return response.data;
 };
 
-// Kategori silmek için DELETE isteği
+// DELETE request to remove a category by its ID
 const deleteCategory = async (id) => {
   await axios.delete(`${API_URL}/${id}`);
 };

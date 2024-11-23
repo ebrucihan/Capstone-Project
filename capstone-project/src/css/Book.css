@@ -1,4 +1,4 @@
-/* Book Ana İçerik Konteyneri */
+/* Book Main Content Container: Defines the style for the main content section */
 .book-content {
   display: flex;
   flex-direction: column;
@@ -14,21 +14,19 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Başlık */
+/* Title styling */
 .book-content h1 {
   font-size: 50px;
   color: #fff;
   margin-bottom: 20px;
 }
 
-/* Mesajlar */
+/* Styling for messages (usually status messages) */
 .book-content p {
   font-size: 20px;
   color: #fff;
   margin-bottom: 20px;
 }
-
-/* Form Alanları İçin Genel Stil */
 
 /* Search Section Styling */
 .search-section {
@@ -38,6 +36,7 @@
   margin-bottom: 20px;
 }
 
+/* Styling for number input field */
 .search-section input[type="number"] {
   padding: 10px;
   border-radius: 5px;
@@ -49,6 +48,8 @@
   font-family: "Sour Gummy", sans-serif;
 }
 
+/* Form layout and styling */
+
 .book-content form {
   display: flex;
   flex-wrap: wrap;
@@ -59,12 +60,14 @@
   margin-bottom: 20px;
 }
 
+/* Form layout and styling */
 .book-content form .form-group {
   display: flex;
   flex-direction: column;
-  width: calc(33.33% - 20px); /* Üçlü yan yana */
+  width: calc(33.33% - 20px);
 }
 
+/* Styling form input and select elements */
 .book-content form .form-group select,
 .book-content form .form-group input {
   padding: 10px;
@@ -76,6 +79,7 @@
   font-family: "Sour Gummy", sans-serif;
 }
 
+/* Different background color for select element */
 .book-content form .form-group select {
   background-color: #d84315;
 }
@@ -98,14 +102,14 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   width: 100px;
-  margin: 5px; /* Butonlar arasına boşluk ekler */
+  margin: 5px; /* Adds space between buttons */
 }
 
 .book-content button:hover {
   background-color: #bf360c;
 }
 
-/* Tablo */
+/* Table */
 .book-content table {
   width: 100%;
   max-width: 1000px;
@@ -129,9 +133,9 @@
   background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Responsive Tasarım */
+/* Responsive Design */
 
-/* Tabletler ve Küçük Masaüstü Ekranlar için */
+/* For Tablets and Small Desktop Screens */
 @media (max-width: 768px) {
   .book-content {
     padding: 20px;
@@ -147,15 +151,14 @@
   }
 
   .book-content form .form-group {
-    width: 100%; /* Küçük ekranlarda tam genişlik */
+    width: 100%; /* Full width on small screens */
   }
 
   .book-content button {
     width: auto;
   }
 }
-
-/* Mobil Cihazlar için */
+/* For Mobile Devices */
 @media (max-width: 480px) {
   .book-content {
     padding: 15px;

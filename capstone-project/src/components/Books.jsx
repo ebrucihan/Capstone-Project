@@ -6,6 +6,7 @@ import CategoriesService from "../services/CategoriesService";
 import "../css/Book.css";
 
 function Books() {
+  // State variables to manage data and form inputs
   const [books, setBooks] = useState([]);
   const [newBook, setNewBook] = useState({
     name: "",
@@ -18,17 +19,19 @@ function Books() {
   const [authors, setAuthors] = useState([]);
   const [publishers, setPublishers] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [editingBook, setEditingBook] = useState(null);
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
-  const [searchId, setSearchId] = useState("");
-  const [tableVisible, setTableVisible] = useState(false);
+  const [editingBook, setEditingBook] = useState(null); // Tracks the book being edited
+  const [message, setMessage] = useState(""); // Feedback message for user
+  const [messageType, setMessageType] = useState(""); // Type of feedback message (error/success)
+  const [searchId, setSearchId] = useState(""); // Input for book search by ID
+  const [tableVisible, setTableVisible] = useState(false); // Controls visibility of book table
   useEffect(() => {
+    // Load authors, publishers, and categories on component mount
     fetchAllAuthors();
     fetchAllPublishers();
     fetchAllCategories();
   }, []);
 
+  // Fetch all books and display them
   const fetchAllBooks = async () => {
     try {
       const data = await BooksService.getBooks();
@@ -41,7 +44,7 @@ function Books() {
       setMessage("An error occurred while pulling all books.");
     }
   };
-
+  // Fetch all authors
   const fetchAllAuthors = async () => {
     try {
       const data = await AuthorsService.getAuthors();
@@ -51,6 +54,7 @@ function Books() {
     }
   };
 
+  // Fetch all publishers
   const fetchAllPublishers = async () => {
     try {
       const data = await PublishersService.getPublishers();
@@ -60,6 +64,7 @@ function Books() {
     }
   };
 
+  // Fetch all categories
   const fetchAllCategories = async () => {
     try {
       const data = await CategoriesService.getCategories();
@@ -69,6 +74,7 @@ function Books() {
     }
   };
 
+  // Handle form input changes and update state
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === "authorId") {
@@ -86,6 +92,7 @@ function Books() {
     }
   };
 
+  // Add a new book
   const handleAddBook = async (e) => {
     e.preventDefault();
     if (!newBook.name || !newBook.publicationYear || !newBook.stock) {
@@ -107,7 +114,7 @@ function Books() {
       await fetchAllBooks();
 
       setTableVisible(true);
-
+      // Reset form
       setNewBook({
         name: "",
         publicationYear: 0,
@@ -117,7 +124,6 @@ function Books() {
         categories: [],
       });
 
-      // Başarı mesajı göster
       setMessage("Book added successfully!");
       setMessageType("success");
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
@@ -126,10 +132,10 @@ function Books() {
       setMessage("An error occurred while adding the book.");
     }
   };
-
+  // Populate form fields for editing an existing book
   const handleEditClick = (book) => {
     setEditingBook(book);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top for editing form
 
     setNewBook({
       name: book.name,
@@ -140,6 +146,8 @@ function Books() {
       categories: book.categories || [],
     });
   };
+
+  // Update an existing book
   const handleUpdateBook = async (e) => {
     e.preventDefault();
 
@@ -150,20 +158,19 @@ function Books() {
     }
 
     try {
-      // API üzerinden kitabı güncelle
       const updatedBook = await BooksService.updateBook(
         editingBook.id,
         newBook
       );
 
-      // Güncellenen kitabı tabloya direkt olarak yansıt
+      // Update book list
       setBooks((prevBooks) =>
         prevBooks.map((book) =>
           book.id === editingBook.id ? { ...book, ...updatedBook } : book
         )
       );
 
-      // Formu sıfırla
+      // Reset form
       setEditingBook(null);
       setNewBook({
         name: "",
@@ -182,7 +189,7 @@ function Books() {
       setMessage("An error occurred while updating the book.");
     }
   };
-
+  // Delete a book
   const handleDeleteClick = async (id) => {
     try {
       await BooksService.deleteBook(id);
@@ -198,10 +205,11 @@ function Books() {
     }
   };
 
+  // Update search input field
   const handleSearchChange = (e) => {
     setSearchId(e.target.value);
   };
-
+  // Search for a book by ID
   const handleSearchBook = async () => {
     if (!searchId) {
       setMessage("Please enter a book ID.");
@@ -211,7 +219,7 @@ function Books() {
     try {
       const foundBook = await BooksService.getBookById(searchId);
       if (foundBook) {
-        setBooks([foundBook]); // Sadece bulunan kitabı gösteriyoruz
+        setBooks([foundBook]); //We only show the book found
         setMessage(`Book with ID ${searchId} found successfully!`);
         setMessageType("success");
       } else {
@@ -219,17 +227,17 @@ function Books() {
         setMessageType("error");
         setBooks([]);
       }
-      setTableVisible(true); // Tabloyu görünür yap
+      setTableVisible(true); // Make table visible
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       console.error("An error occurred while searching for a book:", error);
       setMessage("An error occurred while searching for a book.");
     }
   };
-
+  // Show all books in the table
   const handleGetAllBooks = async () => {
     await fetchAllBooks();
-    setTableVisible(true); // Tablonun görünür olmasını sağlıyoruz
+    setTableVisible(true); // We make the table visible
   };
   return (
     <div className="book-content">

@@ -3,6 +3,7 @@ import AuthorsService from "../services/AuthorsService";
 import "../css/Author.css";
 
 function Authors() {
+  // State variables for authors, new author form data, and editing author
   const [authors, setAuthors] = useState([]);
   const [newAuthor, setNewAuthor] = useState({
     name: "",
@@ -10,17 +11,18 @@ function Authors() {
     country: "",
   });
   const [editingAuthor, setEditingAuthor] = useState(null);
-  const [searchId, setSearchId] = useState("");
-  const [message, setMessage] = useState("");
-  const [showTable, setShowTable] = useState(false); // Tabloyu gösterme durumu
+  const [searchId, setSearchId] = useState(""); // ID to search for an author
+  const [message, setMessage] = useState(""); // Message for user feedback
+  const [showTable, setShowTable] = useState(false); // Show/hide table
 
+  // Fetch all authors from the service
   const fetchAllAuthors = async () => {
     try {
       const data = await AuthorsService.getAuthors();
       setAuthors(data);
-      setShowTable(true); // "Get All Authors" butonuna basıldığında tabloyu göster
+      setShowTable(true); //Show table when fetching all authors
       setMessage("All authors have been successfully loaded!");
-      // Sayfayı aşağı kaydır
+      // Scroll to the bottom of the page for better visibility
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       console.error("An error occurred while pulling all the authors:", error);
@@ -28,40 +30,44 @@ function Authors() {
     }
   };
 
+  // Fetch a single author by their ID
   const fetchAuthorById = async () => {
     try {
       const data = await AuthorsService.getAuthorById(searchId);
       if (data) {
         setAuthors([data]);
-        setShowTable(true); // Tek bir yazar arandığında tabloyu göster
+        setShowTable(true); // Show table even for a single author
         setMessage(`Author with ID ${searchId} found successfully!`);
       } else {
         setMessage(`No author found with ID ${searchId}`);
       }
-      // Sayfayı aşağı kaydır
+
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       console.error("An error occurred while searching for a authors:", error);
       setMessage("An error occurred while searching for a authors.");
     }
   };
+
+  // Handle input change for forms
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (editingAuthor) {
-      setEditingAuthor({ ...editingAuthor, [name]: value });
+      setEditingAuthor({ ...editingAuthor, [name]: value }); // Update editing author
     } else {
-      setNewAuthor({ ...newAuthor, [name]: value });
+      setNewAuthor({ ...newAuthor, [name]: value }); // Update new author form
     }
   };
 
+  // Add a new author
   const handleAddAuthor = async (e) => {
     e.preventDefault();
     try {
       const addedAuthor = await AuthorsService.addAuthor(newAuthor);
-      setAuthors([...authors, addedAuthor]);
-      setNewAuthor({ name: "", birthDate: "", country: "" });
+      setAuthors([...authors, addedAuthor]); // Add to authors list
+      setNewAuthor({ name: "", birthDate: "", country: "" }); // Clear the form
       setMessage("Author added successfully!");
-      setShowTable(true); // Yeni yazar eklendiğinde tabloyu göster
+      setShowTable(true);
 
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
@@ -70,12 +76,14 @@ function Authors() {
     }
   };
 
+  // Handle editing an existing author
   const handleEditClick = (author) => {
     setEditingAuthor(author);
     setMessage("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Update an existing author's details
   const handleUpdateAuthor = async (e) => {
     e.preventDefault();
     try {
@@ -88,9 +96,9 @@ function Authors() {
           author.id === updatedAuthor.id ? updatedAuthor : author
         )
       );
-      setEditingAuthor(null);
+      setEditingAuthor(null); // Clear editing state
       setMessage("Author updated successfully!");
-      setShowTable(true); // Güncelleme sonrasında tabloyu göster
+      setShowTable(true);
 
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
@@ -99,14 +107,15 @@ function Authors() {
     }
   };
 
+  // Delete an author by ID
   const handleDeleteAuthor = async (id) => {
     try {
       await AuthorsService.deleteAuthor(id);
-      setAuthors(authors.filter((author) => author.id !== id));
+      setAuthors(authors.filter((author) => author.id !== id)); // Remove from list
       setMessage("Author deleted successfully!");
-      setShowTable(true); // Silme sonrasında tabloyu göster
-      // Sayfayı üst kısma kaydır
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setShowTable(true);
+
+      window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to the top
     } catch (error) {
       console.error("An error occurred while deleting the author:", error);
       setMessage("An error occurred while deleting the author.");
@@ -166,38 +175,35 @@ function Authors() {
         <button type="submit">{editingAuthor ? "Update" : "Add"}</button>
       </form>
 
-      {showTable &&
-        authors.length > 0 && ( // Tabloyu yalnızca showTable true olduğunda göster
-          <table border="1" cellPadding="10" style={{ marginTop: "20px" }}>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Author Name</th>
-                <th>Birth Date</th>
-                <th>Country</th>
-                <th>Operations</th>
+      {showTable && authors.length > 0 && (
+        <table border="1" cellPadding="10" style={{ marginTop: "20px" }}>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Author Name</th>
+              <th>Birth Date</th>
+              <th>Country</th>
+              <th>Operations</th>
+            </tr>
+          </thead>
+          <tbody>
+            {authors.map((author) => (
+              <tr key={author.id}>
+                <td>{author.id}</td>
+                <td>{author.name}</td>
+                <td>{author.birthDate}</td>
+                <td>{author.country}</td>
+                <td>
+                  <button onClick={() => handleEditClick(author)}>Edit</button>
+                  <button onClick={() => handleDeleteAuthor(author.id)}>
+                    Delete
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {authors.map((author) => (
-                <tr key={author.id}>
-                  <td>{author.id}</td>
-                  <td>{author.name}</td>
-                  <td>{author.birthDate}</td>
-                  <td>{author.country}</td>
-                  <td>
-                    <button onClick={() => handleEditClick(author)}>
-                      Edit
-                    </button>
-                    <button onClick={() => handleDeleteAuthor(author.id)}>
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

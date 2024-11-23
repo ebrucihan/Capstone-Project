@@ -3,6 +3,7 @@ import PublisherService from "../services/PublisherService";
 import "../css/Publisher.css";
 
 function Publishers() {
+  // State to store the list of publishers, new publisher data, and editing state
   const [publishers, setPublishers] = useState([]);
   const [newPublisher, setNewPublisher] = useState({
     name: "",
@@ -13,13 +14,14 @@ function Publishers() {
   const [searchId, setSearchId] = useState("");
   const [message, setMessage] = useState("");
 
+  // Fetch all publishers and display success or error message
   const fetchAllPublishers = async () => {
     try {
       const data = await PublisherService.getPublishers();
       setPublishers(data);
       setMessage("All publishers have been successfully uploaded!");
 
-      // Sayfayı aşağı kaydır
+      // Scroll the page to the bottom after loading
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       console.error(
@@ -30,6 +32,7 @@ function Publishers() {
     }
   };
 
+  // Fetch publisher by ID and display corresponding message
   const fetchPublisherById = async () => {
     try {
       const data = await PublisherService.getPublisherById(searchId);
@@ -41,7 +44,7 @@ function Publishers() {
       } else {
         setMessage(`No publisher found with ID ${searchId}`);
       }
-      // Sayfayı aşağı kaydır
+      // Scroll the page to the bottom after search
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       console.error(
@@ -52,6 +55,7 @@ function Publishers() {
     }
   };
 
+  // Handle input change for both adding and editing publishers
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (editingPublisher) {
@@ -60,7 +64,7 @@ function Publishers() {
       setNewPublisher({ ...newPublisher, [name]: value });
     }
   };
-
+  // Handle adding a new publisher
   const handleAddPublisher = async (e) => {
     e.preventDefault();
     try {
@@ -75,13 +79,14 @@ function Publishers() {
       setMessage("An error occurred while adding a publisher.");
     }
   };
-
+  // Handle clicking on the edit button for a publisher
   const handleEditClick = (publisher) => {
     setEditingPublisher(publisher);
     setMessage("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Handle updating a publisher's information
   const handleUpdatePublisher = async (e) => {
     e.preventDefault();
     try {
@@ -97,21 +102,21 @@ function Publishers() {
       );
       setEditingPublisher(null);
       setMessage("Publisher updated successfully!");
-
+      // Scroll the page to the bottom after updating
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       console.error("An error occurred while updating the publisher:", error);
       setMessage("An error occurred while updating the publisher.");
     }
   };
-
+  // Handle deleting a publisher
   const handleDeletePublisher = async (id) => {
     try {
       await PublisherService.deletePublisher(id);
       setPublishers(publishers.filter((publisher) => publisher.id !== id));
       setMessage("Publisher successfully deleted!");
 
-      // Sayfayı üst kısma kaydır
+      // Scroll the page to the top after deletion
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       console.error("An error occurred while deleting the publisher:", error);

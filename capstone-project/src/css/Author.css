@@ -1,4 +1,4 @@
-/* Author Ana İçerik Konteyneri */
+/* Author Content Container: Defines the style for the main content section */
 .author-content {
   display: flex;
   flex-direction: column;
@@ -7,28 +7,28 @@
   padding: 52px;
   max-width: 1100px;
   margin: 100px auto;
-  background-color: rgba(24, 23, 23, 0.7); /* Şeffaflık ekler */
+  background-color: rgba(24, 23, 23, 0.7); /* Adds transparency */
   border-radius: 15px;
   position: relative;
   overflow: hidden;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Başlık */
+/* Title styling */
 .author-content h1 {
   font-size: 50px;
   color: #fff;
   margin-bottom: 20px;
 }
 
-/* Mesajlar */
+/* Styling for messages (usually status messages) */
 .author-content p {
   font-size: 20px;
   color: #fff;
   margin-bottom: 20px;
 }
 
-/* Butonlar ve Arama Kutusu */
+/* Buttons and Search Box: Styles for input elements and buttons */
 .author-content input[type="text"] {
   background-color: #d84315;
   color: #333232;
@@ -63,7 +63,7 @@
   background-color: #ffffff;
 }
 
-/* Form Elemanları */
+/* Form Elements: Defines the layout and style for form elements */
 .author-content form {
   display: flex;
   flex-direction: column;
@@ -84,7 +84,7 @@
   font-size: 16px;
 }
 
-/* Tablo */
+/* Table: Layout for displaying data like a list of publishers */
 .author-content table {
   width: 100%;
   max-width: 1000px;

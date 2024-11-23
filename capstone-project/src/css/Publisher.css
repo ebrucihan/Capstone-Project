@@ -1,4 +1,4 @@
-/* Publisher Ana İçerik Konteyneri */
+/* Publisher Main Content Container */
 .publisher-content {
   display: flex;
   flex-direction: column;
@@ -7,28 +7,26 @@
   padding: 52px;
   max-width: 1100px;
   margin: 100px auto;
-  background-color: rgba(24, 23, 23, 0.7); /* Şeffaflık ekler */
+  background-color: rgba(24, 23, 23, 0.7);
   border-radius: 15px;
   position: relative;
   overflow: hidden;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Başlık */
+/* Title Styling */
 .publisher-content h1 {
   font-size: 50px;
   color: #fff;
   margin-bottom: 20px;
 }
-
-/* Mesajlar */
+/* Message Styling */
 .publisher-content p {
   font-size: 20px;
   color: #fff;
   margin-bottom: 20px;
 }
-
-/* Butonlar ve Arama Kutusu */
+/* Buttons and Input Fields */
 .publisher-content button,
 .publisher-content input[type="text"] {
   background-color: #d84315;
@@ -48,7 +46,7 @@
   background-color: #bf360c;
 }
 
-/* Form Elemanları */
+/* Form Elements */
 .publisher-content form {
   display: flex;
   flex-direction: column;
@@ -69,7 +67,7 @@
   font-family: "Sour Gummy", sans-serif;
 }
 
-/* Tablo */
+/* Table Styling */
 .publisher-content table {
   width: 100%;
   max-width: 1000px;

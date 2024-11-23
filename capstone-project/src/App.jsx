@@ -15,11 +15,11 @@ function App() {
       const navbar = document.querySelector(".navbar");
 
       if (window.scrollY > 50) {
-        navbar.style.backgroundColor = "#d84315"; // Kaydırıldığında arka plan rengini değiştir
-        navbar.style.opacity = "1"; // Hep görünür yap
+        navbar.style.backgroundColor = "#d84315";
+        navbar.style.opacity = "1";
       } else {
-        navbar.style.backgroundColor = "transparent"; // En yukarıdayken şeffaf yap
-        navbar.style.opacity = "1"; // Görünürlüğü geri getir
+        navbar.style.backgroundColor = "transparent";
+        navbar.style.opacity = "1";
       }
     };
 
