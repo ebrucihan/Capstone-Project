@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "https://nearby-abra-patikadev-11eb29a9.koyeb.app/api/v1/categories";
+  "https://ripe-mamie-patikadev-039fcbfe.koyeb.app/api/v1/categories";
 
 // GET request to fetch all categories
 const getCategories = async () => {

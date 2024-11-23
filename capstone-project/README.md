@@ -1,4 +1,4 @@
-# Library Management System
+# Capstone Project
 
 This project is a full-stack application designed to streamline the management of a library's operations. It enables administrators to manage authors, books, publishers, categories, and borrowings efficiently. With a user-friendly interface and robust backend, the system simplifies everyday library tasks.
 
@@ -33,7 +33,6 @@ You can explore the project live at this [Demo Link](https://your-demo-link.com)
 - **CSS**: For elegant and responsive UI design.
 - **React Router**: Navigation between different modules.
 - **Axios**: Handles API requests seamlessly.
--
 
 ### Backend:
 
@@ -46,13 +45,11 @@ You can explore the project live at this [Demo Link](https://your-demo-link.com)
 ### Deployment:
 
 - **Netlify**: Frontend hosting.
-- **Heroku/AWS**: Backend hosting (or mention the platform used).
+- **Koyeb**: Backend hosting (or mention the platform used).
 
 ## Setup and Installation
 
-### Backend:
-
 1. Clone the repository:
    ```bash
-   git clone <https://github.com/your-username/library-management-backend.git>
+   git clone https://github.com/ebrucihan/Capstone-Project.git
    ```
