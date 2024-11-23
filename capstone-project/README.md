@@ -33,7 +33,7 @@ You can explore the project live at this [Demo Link](https://your-demo-link.com)
 - **CSS**: For elegant and responsive UI design.
 - **React Router**: Navigation between different modules.
 - **Axios**: Handles API requests seamlessly.
--
+
 
 ### Backend:
 
@@ -46,11 +46,9 @@ You can explore the project live at this [Demo Link](https://your-demo-link.com)
 ### Deployment:
 
 - **Netlify**: Frontend hosting.
-- **Heroku/AWS**: Backend hosting (or mention the platform used).
+- **Koyeb**: Backend hosting (or mention the platform used).
 
 ## Setup and Installation
-
-### Backend:
 
 1. Clone the repository:
    ```bash
