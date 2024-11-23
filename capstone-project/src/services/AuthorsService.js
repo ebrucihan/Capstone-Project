@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/v1/authors";
+const API_URL =
+  "https://nearby-abra-patikadev-11eb29a9.koyeb.app/api/v1/authors";
 
 // Tüm yazarları getirmek için GET isteği
 const getAuthors = async () => {

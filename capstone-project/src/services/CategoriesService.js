@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/v1/categories";
+const API_URL =
+  "https://nearby-abra-patikadev-11eb29a9.koyeb.app/api/v1/categories";
 
 // Tüm kategorileri getirmek için GET isteği
 const getCategories = async () => {
