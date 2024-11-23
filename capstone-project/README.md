@@ -54,5 +54,5 @@ You can explore the project live at this [Demo Link](https://your-demo-link.com)
 
 1. Clone the repository:
    ```bash
-   git clone <https://github.com/your-username/library-management-backend.git>
+   git clone https://github.com/ebrucihan/Capstone-Project.git
    ```
