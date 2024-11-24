@@ -51,7 +51,6 @@ p.home-intro {
 
 /* Responsive Design */
 
-/* For Large Screens */
 @media (min-width: 1300px) {
   .home-content {
     max-width: 1700px; /* Increases max-width for large screens */
