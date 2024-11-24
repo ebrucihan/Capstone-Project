@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "https://ripe-mamie-patikadev-039fcbfe.koyeb.app/api/v1/publishers";
+  "https://wet-nicolle-patikadev-1e5d27b5.koyeb.app/api/v1/publishers";
 
 // GET request to fetch all publishers
 const getPublishers = async () => {

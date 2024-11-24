@@ -2,7 +2,7 @@ import axios from "axios";
 
 // API endpoint URL for authors
 const API_URL =
-  "https://ripe-mamie-patikadev-039fcbfe.koyeb.app/api/v1/authors";
+  "https://wet-nicolle-patikadev-1e5d27b5.koyeb.app/api/v1/authors";
 
 // GET request to fetch all authors
 const getAuthors = async () => {

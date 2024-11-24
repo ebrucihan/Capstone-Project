@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "https://ripe-mamie-patikadev-039fcbfe.koyeb.app/api/v1/borrows";
+  "https://wet-nicolle-patikadev-1e5d27b5.koyeb.app/api/v1/borrows";
 
 // GET request to fetch all borrow records
 const getAllBorrows = async () => {
